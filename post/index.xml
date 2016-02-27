@@ -10,12 +10,16 @@
     <atom:link href="http://jchli.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
-      <title>my first post</title>
+      <title>My First Post</title>
       <link>http://jchli.github.io/post/my-first-post/</link>
       <pubDate>Fri, 26 Feb 2016 22:09:34 -0800</pubDate>
       
       <guid>http://jchli.github.io/post/my-first-post/</guid>
-      <description></description>
+      <description>&lt;ul&gt;
+&lt;li&gt;Title1
+Trying to start a blog and testing to see if everything works.&lt;/li&gt;
+&lt;/ul&gt;
+</description>
     </item>
     
   </channel>
