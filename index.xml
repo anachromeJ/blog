@@ -1,27 +1,25 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Apples Oranges</title>
-    <link>http://jchli.github.io/</link>
-    <description>Recent content on Apples Oranges</description>
+    <title>Jincheng Li</title>
+    <link>jinchengli.me/</link>
+    <description>Recent content on Jincheng Li</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Fri, 26 Feb 2016 22:09:34 -0800</lastBuildDate>
-    <atom:link href="http://jchli.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="jinchengli.me/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
-      <title>First Post</title>
-      <link>http://jchli.github.io/post/first-post/</link>
+      <title>Why This Blog</title>
+      <link>/jinchengli.me/post/first-post/</link>
       <pubDate>Fri, 26 Feb 2016 22:09:34 -0800</pubDate>
       
-      <guid>http://jchli.github.io/post/first-post/</guid>
-      <description>
+      <guid>/jinchengli.me/post/first-post/</guid>
+      <description>&lt;p&gt;This is probably the last year of my student life, where I still have a lot of freedom allocating my time. In the hopes of putting my spare time to better use than playing Witcher 3 and Hearthstone, I decided to start writing some technical articles. This would be a good opportunity for me to do some research into things I never dedicate enough time to understand, and hopefully benefit whoever chances upon this little blog :)&lt;/p&gt;
 
-&lt;h1 id=&#34;why-i-started-this:f3b70d76da56e15d82042b9ef176d71f&#34;&gt;Why I Started This&lt;/h1&gt;
+&lt;p&gt;Also I haven&amp;rsquo;t tried to start a website for ~3 years now, and as I&amp;rsquo;m beginning to find out, it&amp;rsquo;s &lt;em&gt;unbelievably&lt;/em&gt; easy to spin up something like this. No wonder everyone has their own blog these days and they all look so pretty (I&amp;rsquo;m currently using Hugo, Github Pages and Namecheap for this site).&lt;/p&gt;
 
-&lt;p&gt;Decided to put my spare time to better use (than playing Witcher 3 and Hearthstone), and start writing some technical articles. This would be a good opportunity for me to do some research into things I never dedicate enough time to understand, and hopefully benefit whoever chances upon this little blog :)&lt;/p&gt;
-
-&lt;p&gt;Also I haven&amp;rsquo;t tried to start a website for ~3 years now, and it&amp;rsquo;s &lt;em&gt;unbelievably&lt;/em&gt; easy to spin up something like this. No wonder everyone has their own blog these days and they all look so pretty (I&amp;rsquo;m currently using Hugo, Github Pages and Namecheap for this site).&lt;/p&gt;
+&lt;p&gt;Cheers!&lt;/p&gt;
 </description>
     </item>
     
