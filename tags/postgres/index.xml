@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Jincheng Li</title>
-    <link>http://jinchengli.me/</link>
-    <description>Recent content on Jincheng Li</description>
+    <title>Postgres on Jincheng Li</title>
+    <link>http://jinchengli.me/tags/postgres/</link>
+    <description>Recent content in Postgres on Jincheng Li</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sat, 19 Mar 2016 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://jinchengli.me/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://jinchengli.me/tags/postgres/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>PostgreSQL Query Optimization (Work In Progress)</title>
@@ -107,20 +107,6 @@ WHERE m.mid = n.mid AND n.year = 2016;
 &lt;h2 id=&#34;the-postgres-query-optimizer:909bee48cea3b78afa7b2d1d59f0a47c&#34;&gt;The Postgres Query Optimizer&lt;/h2&gt;
 
 &lt;p&gt;With all the background knowledge out of the way, we can dive into the specifics of PostgreSQL&amp;rsquo;s query optimizer. In a typical database class (e.g. the one I&amp;rsquo;m taking at Columbia), you will learn that most query optimizers adopt the tradition of the &amp;ldquo;System R Query Optimizer&amp;rdquo;, which was a research project at IBM some time ago. This is largely true, but not exactly true in the case of Postgres. When enumerating query plans, the System R Optimizer would only consider &amp;ldquo;left-deep&amp;rdquo; plans, i.e. plans where only the left-subtree can be the result of a join, and the right subtree must be a table that exists in the database. The purpose of this restriction is to reduce the exponential space of possible query plans. It is still exponential after this reduction, but much more manageable. In the case of Postgres, however, in addition to left-deep plans, right-deep plans and &amp;ldquo;bushy&amp;rdquo; plans are also considered.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Why This Blog</title>
-      <link>http://jinchengli.me/post/first-post/</link>
-      <pubDate>Sun, 13 Mar 2016 00:00:00 +0000</pubDate>
-      
-      <guid>http://jinchengli.me/post/first-post/</guid>
-      <description>&lt;p&gt;This is probably my last year as a student, when I still have a lot of freedom allocating my time. In the hopes of putting my spare time to better use than playing Witcher 3 and Hearthstone, I decided to start writing some technical articles. This would be a good opportunity for me to do some research into things I never dedicate enough time to understand, and hopefully benefit whoever chances upon this little blog :)&lt;/p&gt;
-
-&lt;p&gt;Also I haven&amp;rsquo;t tried to start a website for ~3 years now, and as I&amp;rsquo;m starting to find out, it&amp;rsquo;s &lt;em&gt;unbelievably&lt;/em&gt; easy to spin up something like this. No wonder everyone has their own blog these days and they all look so pretty (I&amp;rsquo;m currently using Hugo, Github Pages and Namecheap for this site).&lt;/p&gt;
-
-&lt;p&gt;Cheers!&lt;/p&gt;
 </description>
     </item>
     
