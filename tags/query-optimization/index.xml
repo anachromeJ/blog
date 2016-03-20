@@ -88,7 +88,7 @@ WHERE m.mid = n.mid AND n.year = 2016;
 
 &lt;h4 id=&#34;joins:909bee48cea3b78afa7b2d1d59f0a47c&#34;&gt;Joins&lt;/h4&gt;
 
-&lt;p&gt;Finally, our main concern in this post - the join operator. There are a number of different algorithms for performing joins: nested loops join, block nested loops join, index nested loops join, sort merge join, and hash join. Figuring out the best query evaluation plan typically amounts to enumerating all the different orders in which you can join tables, and then choosing the best join algorithm for each join. For our discussion here, let&amp;rsquo;s suppose we are joining two tables A and B, where A has , respectively. We&amp;rsquo;ll go over the join algorithms one by one.&lt;/p&gt;
+&lt;p&gt;Finally, our main concern in this post - the join operator. There are a number of different algorithms for performing joins: nested loops join, block nested loops join, index nested loops join, sort merge join, and hash join. Figuring out the best query evaluation plan typically amounts to enumerating all the different orders in which you can join tables, and then choosing the best join algorithm for each join. For our discussion here, let&amp;rsquo;s suppose we are joining two tables A and B, where A has $p_A$ pages and $n_A$ rows, and B has  $p_B$ pages and $n_B$ rows. We&amp;rsquo;ll go over the join algorithms one by one.&lt;/p&gt;
 
 &lt;ol&gt;
 &lt;li&gt;&lt;p&gt;Nested Loops Join&lt;/p&gt;

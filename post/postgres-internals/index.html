@@ -128,7 +128,7 @@ WHERE m.mid = n.mid AND n.year = 2016;
 
 <h4 id="joins:909bee48cea3b78afa7b2d1d59f0a47c">Joins</h4>
 
-<p>Finally, our main concern in this post - the join operator. There are a number of different algorithms for performing joins: nested loops join, block nested loops join, index nested loops join, sort merge join, and hash join. Figuring out the best query evaluation plan typically amounts to enumerating all the different orders in which you can join tables, and then choosing the best join algorithm for each join. For our discussion here, let&rsquo;s suppose we are joining two tables A and B, where A has , respectively. We&rsquo;ll go over the join algorithms one by one.</p>
+<p>Finally, our main concern in this post - the join operator. There are a number of different algorithms for performing joins: nested loops join, block nested loops join, index nested loops join, sort merge join, and hash join. Figuring out the best query evaluation plan typically amounts to enumerating all the different orders in which you can join tables, and then choosing the best join algorithm for each join. For our discussion here, let&rsquo;s suppose we are joining two tables A and B, where A has $p_A$ pages and $n_A$ rows, and B has  $p_B$ pages and $n_B$ rows. We&rsquo;ll go over the join algorithms one by one.</p>
 
 <ol>
 <li><p>Nested Loops Join</p>
@@ -233,6 +233,23 @@ WHERE m.mid = n.mid AND n.year = 2016;
 <script src="http://jinchengli.me/js/index.js"></script>
 <script src="http://jinchengli.me/js/smooth-scroll.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/highlight.min.js"></script>
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$'], ['\[','\]']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+  }
+});
+</script>
 
 <script>
     smoothScroll.init({
@@ -252,6 +269,7 @@ WHERE m.mid = n.mid AND n.year = 2016;
   g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
   s.parentNode.insertBefore(g,s)}(document,'script'));
 </script>
+
 
 
 </body>
