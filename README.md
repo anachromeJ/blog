@@ -1,2 +1,2 @@
 # jinchengli.me (jchli.github.io)
-personal page
+personal page over at [jinchengli.me](jinchengli.me)
