@@ -1,2 +1,2 @@
-# jchli.github.io
+# jinchengli.me (jchli.github.io)
 personal page
