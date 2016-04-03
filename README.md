@@ -1,2 +1,2 @@
 # Personal Blog
-check out [jinchengli.me](http://jinchengli.me)
+[jinchengli.me](http://jinchengli.me)
