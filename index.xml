@@ -6,8 +6,216 @@
     <description>Recent content on Jincheng Li</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 13 Mar 2016 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 19 Mar 2016 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://jinchengli.me/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>PostgreSQL Query Optimization (Work In Progress)</title>
+      <link>http://jinchengli.me/post/postgres-query-opt/</link>
+      <pubDate>Sat, 19 Mar 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://jinchengli.me/post/postgres-query-opt/</guid>
+      <description>
+
+&lt;p&gt;The other day I saw a tweet about blog posts it would be great to see, and one of them was &amp;ldquo;inside PostgreSQL: how a join works internally, what makes it fast&amp;rdquo;. Coincidentally, I&amp;rsquo;m taking a course on database system implementation, and I thought this would be a great way to study for my midterm! Of course, by the time I&amp;rsquo;ve finished this post, the midterm is long gone, but it was still a great incentive for me to start writing :)&lt;/p&gt;
+
+&lt;h2 id=&#34;background:2ff4998d21abeead8e3bebf18c3db905&#34;&gt;Background&lt;/h2&gt;
+
+&lt;p&gt;This post assumes you know a little something about relational databases and SQL queries. Having some knowledge in query optimization certainly helps, but is not necessary.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;http://www.postgresql.org/about&#34;&gt;PostgreSQL&lt;/a&gt;, or Postgres, is an open-source object-relational database management system. It has gone through around 30 years of development, has a ton of features, and is very popular within the database community. The fact that it is open-source makes it a great candidate system to study and write an article about. This post will only focus on its query optimization routines, particularly how it optimizes join queries. If you are curious, though, you should definitely check out the source code for yourself and read about its architecture.&lt;/p&gt;
+
+&lt;h2 id=&#34;query-optimization-101:2ff4998d21abeead8e3bebf18c3db905&#34;&gt;Query Optimization 101&lt;/h2&gt;
+
+&lt;p&gt;We all know that we can run SQL queries through a DBMS, and these queries are &lt;em&gt;pretty&lt;/em&gt; fast (no really), but how does a DBMS go about evaluating these queries? How does it take advantage of the indexes on tables to speed up queries? This is where query optimization comes in. Query optimization is the process of determining the best evaluation plan for a query, based on a limited amount of information about a database (e.g. metadata of its tables).&lt;/p&gt;
+
+&lt;p&gt;Given a SQL query, a query optimizer typically determines the best plan in two steps:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;generate (a subset of) all possible plans&lt;/li&gt;
+&lt;li&gt;evaluate the cost of each plan, and pick the one with the lowest cost&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;The details of how each DBMS chooses to implement steps 1 and 2 vary, but this 2-step process applies to most relational query optimizers, including Postgres. In order to understand this process, we need to know a little bit more about query evaluation plans, algorithms for evaluating relational operators, and analysis of costs. Let&amp;rsquo;s start with query evaluation plans.&lt;/p&gt;
+
+&lt;h3 id=&#34;query-evaluation-plans:2ff4998d21abeead8e3bebf18c3db905&#34;&gt;Query Evaluation Plans&lt;/h3&gt;
+
+&lt;p&gt;A query evaluation plan describes how a query should be evaluated, by specifying the order of relational operators and the algorithms to use for each operator. For example, suppose we have a query involving a join and a selection condition. One possible query evaluation plan for this is to do the join first, using the nested loops join algorithm, and then as tuples come out of the join, filter them with the selection condition.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;rsquo;s talk about a concrete example. Suppose we have a database about Oscar nominations, with the following tables:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;CREATE TABLE Movies (
+  mid int PRIMARY KEY,
+  title text NOT NULL
+);
+
+CREATE TABLE People (
+  pid int PRIMARY KEY,
+  name text NOT NULL
+);
+  
+CREATE TABLE Nominees (
+  pid int,
+  mid int,
+  year int NOT NULL,
+  won bool NOT NULL,
+  PRIMARY KEY (pid, mid)
+);
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Here is a SQL query that finds the names of all movies nominated in 2016:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;SELECT m.title
+FROM Movies m, Nominees n
+WHERE m.mid = n.mid AND n.year = 2016;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;One possible evaluation plan for this query is to join Movies and Nominees first with nested loops join, and then filter the results one tuple at a time with the selection condition &lt;code&gt;n.year = 2016&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Query evaluation plans are typically represented as trees, where each node of the tree represents a table that is either readily available in the database, or the result of an operation. Nodes are accordingly annotated with either the name of the table in the database, or the relational operator and the corresponding method of evaluation. For the movie query above, the query evaluation plan would be represented as:&lt;/p&gt;
+
+&lt;!-- TODO: insert diagram here, and maybe use a different example --&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://jinchengli.me/img/query-plan.png&#34; alt=&#34;diagram&#34; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;algorithms-for-relational-operators-mostly-joins:2ff4998d21abeead8e3bebf18c3db905&#34;&gt;Algorithms for Relational Operators (Mostly Joins)&lt;/h3&gt;
+
+&lt;p&gt;Now that we know how query plans are structured, we can go into more detail on the specific algorithms for evaluating relational operators. Before doing this, we need to have some meaningful measure of the performance of an algorithm. Conventionally, in a DBMS, the cost of an operation is considered in terms of the number of disk page I/Os. If some operation in a query plan reads two pages and writes one page, then its cost would be 3 I/Os. Postgres adopts a similar cost model, albeit a bit more nuisanced. It records not just the total cost of an operation, but also the start-up cost - cost before the first row can be returned. The start-up cost is useful for cases like an &lt;code&gt;EXISTS&lt;/code&gt; clause or a &lt;code&gt;LIMIT&lt;/code&gt; clause, where the query executor will stop after fetching the first couple of rows. For our discussion of algorithms here, cost simply refers to the total I/O cost.&lt;/p&gt;
+
+&lt;h4 id=&#34;everything-except-joins:2ff4998d21abeead8e3bebf18c3db905&#34;&gt;Everything Except Joins&lt;/h4&gt;
+
+&lt;p&gt;We&amp;rsquo;ll briefly go over relational operators other than join first. There are three major relational operators: selection, projection and join. It&amp;rsquo;s usually straightforward to do selection and projection. For selection, you have one of two choices - use an index, or scan the entire table. The cost of using an index varies depending on the kind of index available and the number of rows returned, but the cost estimation is simple. For projection, if there is no DISTINCT keyword, you simply scan the table and retrieve a subset of the fields of each tuple. If &lt;code&gt;DISTINCT&lt;/code&gt; is specified, then typically you would sort the table and discard the duplicates. The more interesting aspect of optimizing selections and projections is trying to find an optimal ordering of these operations with respect to other operations (like join). We can choose to do a projection first, and then join the resulting table with another table, or we can join first and then project later.&lt;/p&gt;
+
+&lt;p&gt;There are other (arguably) less common relational operators: aggregation using &lt;code&gt;GROUP BY&lt;/code&gt;, and set operations. Aggregation is usually done by sorting the table first, and then scanning the sorted tuples while updating an in-memory counter. Set operations are similar to projection with &lt;code&gt;DISTINCT&lt;/code&gt;, in that the expensive part is duplicate elimination. Again, this is typically implemented through sorting.&lt;/p&gt;
+
+&lt;h4 id=&#34;joins:2ff4998d21abeead8e3bebf18c3db905&#34;&gt;Joins&lt;/h4&gt;
+
+&lt;p&gt;Finally, our main concern in this post - the join operator. It turns out that unlike the other operators, there are a number of algorithms for joins, each of which can be useful in certain situations: nested loops join, block nested loops join, index nested loops join, sort merge join, and hash join. Figuring out the best query evaluation plan typically amounts to enumerating all the different orders in which you can join tables, and then choosing the best join algorithm for each join. For our discussion here, let&amp;rsquo;s suppose that we are joining two tables A and B, where A has $p_A$ pages and $n_A$ rows, and B has  $p_B$ pages and $n_B$ rows. We&amp;rsquo;ll go over the join algorithms one by one.&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;Nested Loops Join&lt;/p&gt;
+
+&lt;p&gt;Nested loops join is the brute-force algorithm that comes mind when you first hear the definition of a join - it does a cross-product of the two tables, and filters the result with the join condition. Thus for each row in the outer table, the inner table has to be scanned in its entirety. This would cost $n_Ap_B$ I/Os. This is pretty much only useful if you&amp;rsquo;re joining two tables with a handful of rows.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Block Nested Loops Join&lt;/p&gt;
+
+&lt;p&gt;Block nested loops join builds on top of simple nested loops join, and takes advantage of the buffer pool pages (RAM). The basic idea is to load the entire inner relation into memory, so no more I/O is necessary for the inner table. What&amp;rsquo;s left is just going through the outer table page by page, and then matching the tuples. Thus the total I/O cost is $p_Ap_B$.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Index Nested Loops Join&lt;/p&gt;
+
+&lt;p&gt;Index nested loops join is feasible when there is an index on the attribute being joined on of the inner table. This would potentially speed up finding a matching tuple in the inner table. For each tuple in the outer table, we now don&amp;rsquo;t have to scan the entire inner table, but simply use the index to find matching tuples. The cost of this method depends on the number of average matching tuples, and the type of index being used. It&amp;rsquo;s best for when there is a small number of matching tuples for each tuple in the outer relation.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Sort Merge Join&lt;/p&gt;
+
+&lt;p&gt;Sort merge join does a sort of tables A and B on the joined attribute first, and then traverses the sorted tables while merging matching tuples together. The cost of this is the cost of sorting the two tables, plus the cost of a sequential scan of the two tables. Sorting in a DBMS deserves a dedicated post, but put simply, the most common sorting algorithm in a DBMS is just a more nuanced version of the regular merge sort, which costs $O(p\log p)$. Thus the total cost of sort merge join is $O(p_A\log p_A) + O(p_B\log p_B) + p_A + p_B$.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Hash Join&lt;/p&gt;
+
+&lt;p&gt;Hash join partitions the two tables first, where tuples in each partition hashes to the same value (with collisions, of course). Then, for each pair of matching partitions, it loads the tuples in those partitions into memory and uses a second hash function to match them together. The partitioning phase costs $2(p_A+p_B)$ I/Os because we need to read in the two tables and then write out the partitions. The matching phase takes another $(p_A+p_B)$ I/Os, so the total cost is $3(p_A + p_B)$ I/Os.&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;That covers all the join algorithms. What&amp;rsquo;s important to note here is that none of these is strictly better than another. Depending on the size of the input relations, the available indexes, and the ordering of tuples, there are cases where each of these algorithms should be favored. What one should be favored is exactly what the query optimizer tries to figure out.&lt;/p&gt;
+
+&lt;h2 id=&#34;the-postgres-query-optimizer:2ff4998d21abeead8e3bebf18c3db905&#34;&gt;The Postgres Query Optimizer&lt;/h2&gt;
+
+&lt;p&gt;With all the background knowledge out of the way, we can dive into the specifics of PostgreSQL&amp;rsquo;s query optimizer. In a typical database class (e.g. the one I&amp;rsquo;m taking at Columbia), you will learn that most query optimizers adopt the tradition of the &amp;ldquo;System R Query Optimizer&amp;rdquo;, which runs a dynamic-programming algorithm on a restricted set of query plans to figure out the best plan. This largely applies to Postgres, with a couple of caveats:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;When enumerating query plans, the System R Optimizer would only consider &amp;ldquo;left-deep&amp;rdquo; plans, i.e. plans where only the left-subtree can be the result of a join, and the right subtree must be a table that exists in the database (picture an extremely unbalanced binary tree). The purpose of this restriction is to reduce the exponential space of possible query plans. In the case of Postgres, however, in addition to left-deep plans, right-deep plans and &amp;ldquo;bushy&amp;rdquo; plans are also considered. Right-deep plans are self-explanatory - plans where only the right-subtree can be the result of a join. Bushy plans are plans where both subtrees can be the result of a join.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;In addition to the traditional optimizer using the dynamic programming algorithm, Postgres also implements GEQO - Genetic Query Optimizer - which does query planning with heuristic search. In general, GEQO finds worse plans than the traditional optimizer, but it is faster since it does not consider as many plans, so Postgres uses the traditional optimizer when there are less than 12 relations being joined, and switched to GEQO when there are at least 12 relations (there is a configuration option &lt;code&gt;geqo_threshold&lt;/code&gt; that defaults to 12 and can be tweaked). In any case, we won&amp;rsquo;t elaborate on GEQO in this post anymore. This is already a pretty long post, and although genetic algorithms sound really cool, I don&amp;rsquo;t want this to drag on for another 10 pages.&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Let&amp;rsquo;s talk about the dyanmic programming algorithm, then! In fact, it&amp;rsquo;s called the &amp;ldquo;Selinger Optimizer&amp;rdquo;.&lt;/p&gt;
+
+&lt;h3 id=&#34;the-postgres-version-of-selinger-optimizer:2ff4998d21abeead8e3bebf18c3db905&#34;&gt;The (Postgres&amp;rsquo; version of) Selinger Optimizer&lt;/h3&gt;
+
+&lt;p&gt;I don&amp;rsquo;t know if it&amp;rsquo;s just me, but when I was doing research on this topic, a lot of the text just referred to this as &amp;ldquo;dynamic programming algorithm for joins&amp;rdquo;, and not the Selinger Optimizer. People need to realize that everything should have a name, and the Selinger Optimizer sounds pretty nice.&lt;/p&gt;
+
+&lt;p&gt;So, we&amp;rsquo;re tasked with finding the best join order for a set of $N$ relations. What do we do now? Selinger Optimizer does this by iterating on the number of relations $i$ being considered, starting from 1. On iteration $i$, we compute the best plan to join $i$ relations out of the total $N$ relations together. Note that there are $N \choose i$ possible combinations for iteration $i$. We do this repeatedly until $i$ reaches $N$, at which point we&amp;rsquo;ve found the best join order for the $N$ relations.&lt;/p&gt;
+
+&lt;p&gt;Here&amp;rsquo;s what happens at iteration $i$ of the algorithm, assuming we store our results in the &lt;code&gt;bestjoin&lt;/code&gt; array:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;// left-deep and right-deep
+for each set of (i-1) relations S begin
+    for each relation R not in S begin
+        consider all possible algorithms to join bestjoin[S] with R
+        consider all possible algorithms to join R with bestjoin[S]
+        pick the best one, and set bestjoin[S + R] to that plan
+    end
+end
+
+// bushy
+for j = 2 to (i-2) begin
+    for each set of j relations S1 begin
+        for each set of (i-j) relations S2 begin
+            consider all plans to join bestjoin[S1] with bestjoin[S2]
+            set bestjoin[S1+S2] to the best plan if better than current
+        end
+    end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Let&amp;rsquo;s do an example to better understand what this is talking about. Suppose we are joining four relations A,B,C,D.&lt;/p&gt;
+
+&lt;p&gt;Iteration 1 of the algorithm is pretty straightforward:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;bestjoin[A] = A
+bestjoin[B] = B
+bestjoin[C] = C
+bestjoin[D] = D
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Iteration 2 of the algorithm, where &lt;code&gt;op&lt;/code&gt; stands for any one of the five join algorithms mentioned earlier (nested loops join, block nested loops join, index nested loops join, sort merge join and hash join):&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;bestjoin[A,B] = best(bestjoin[A] op B, bestjoin[B] op A)
+bestjoin[A,C] = best(bestjoin[A] op C, bestjoin[C] op A)
+bestjoin[A,D] = best(bestjoin[A] op D, bestjoin[D] op A)
+bestjoin[B,C] = best(bestjoin[B] op C, bestjoin[C] op B)
+bestjoin[B,D] = best(bestjoin[B] op D, bestjoin[D] op B)
+bestjoin[C,D] = best(bestjoin[C] op D, bestjoin[D] op C)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Iteration 3 of the algorithm, now left-deep and right-deep starts to make a difference:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;bestjoin[A,B,C] = best(bestjoin[A,B] op C,
+                       bestjoin[A,C] op B,
+                       bestjoin[B,C] op A
+                       C op bestjoin[A,B],
+                       B op bestjoin[A,C],
+                       A op bestjoin[B,C])
+bestjoin[A,B,D] = best(bestjoin[A,B] op D,
+                       bestjoin[A,D] op B,
+                       bestjoin[B,D] op A,
+                       D op bestjoin[A,B],
+                       B op bestjoin[A,D],
+                       A op bestjoin[B,D])
+bestjoin[A,C,D] and bestjoin[B,C,D] are similar
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Finally, iteration 4 of the algorithm, where bushy plans come in:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;bestjoin[A,B,C,D] = best(bestjoin[A,B,C] op D,
+                         bestjoin[A,B,D] op C,
+                         bestjoin[A,C,D] op B,
+                         bestjoin[B,C,D] op A,
+                         D op bestjoin[A,B,C],
+                         C op bestjoin[A,B,D],
+                         B op bestjoin[A,C,D],
+                         A op bestjoin[B,C,D],
+                         bestjoin[A,B] op bestjoin[C,D],
+                         bestjoin[A,C] op bestjoin[B,D],
+                         bestjoin[A,D] op bestjoin[B,C],
+                         bestjoin[B,C] op bestjoin[A,D],
+                         bestjoin[B,D] op bestjoin[A,C],
+                         bestjoin[C,D] op bestjoin[A,B])
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;After all this, we get the best plan to join the four relations A,B,C,D.&lt;/p&gt;
+
+&lt;p&gt;It may not seem terribly effective at first, but at each iteration, we are actually re-using a lot of information computed from previous iterations, and thus saving a lot of CPU time. The exponential space of plans is unavoidable whether we choose to only consider left-deep plans, or all of left-deep, right-deep and bushy plans. Postgres also tries to be smart about this, and preemptively discard some joins that are obviously inefficient. For example, only joins between relations that share some attributes are considered (otherwise it would just be a cross-product).&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Why This Blog</title>
