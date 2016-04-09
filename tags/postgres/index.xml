@@ -10,7 +10,7 @@
     <atom:link href="http://jinchengli.me/tags/postgres/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
-      <title>PostgreSQL Query Optimization (Work In Progress)</title>
+      <title>PostgreSQL Query Optimization</title>
       <link>http://jinchengli.me/post/postgres-query-opt/</link>
       <pubDate>Sat, 19 Mar 2016 00:00:00 +0000</pubDate>
       
