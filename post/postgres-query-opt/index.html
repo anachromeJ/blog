@@ -154,7 +154,7 @@ WHERE m.mid = n.mid AND n.year = 2016;
 <p>Hash join partitions the two tables first, where tuples in each partition hashes to the same value (with collisions, of course). Then, for each pair of matching partitions, it loads the tuples in those partitions into memory and uses a second hash function to match them together. The partitioning phase costs $2(p_A+p_B)$ I/Os because we need to read in the two tables and then write out the partitions. The matching phase takes another $(p_A+p_B)$ I/Os, so the total cost is $3(p_A + p_B)$ I/Os.</p></li>
 </ol>
 
-<p>That covers all the join algorithms. What&rsquo;s important to note here is that none of these is strictly better than another. Depending on the size of the input relations, the available indexes, and the ordering of tuples, there are cases where each of these algorithms should be favored. What one should be favored is exactly what the query optimizer tries to figure out.</p>
+<p>That covers all the join algorithms. What&rsquo;s important to note here is that none of these is strictly better than another. Depending on the size of the input relations, the available indexes, and the ordering of tuples, there are cases where each of these algorithms should be favored. Which one should be favored is exactly what the query optimizer tries to figure out.</p>
 
 <h2 id="the-postgres-query-optimizer:2ff4998d21abeead8e3bebf18c3db905">The Postgres Query Optimizer</h2>
 
@@ -163,7 +163,7 @@ WHERE m.mid = n.mid AND n.year = 2016;
 <ol>
 <li><p>When enumerating query plans, the System R Optimizer would only consider &ldquo;left-deep&rdquo; plans, i.e. plans where only the left-subtree can be the result of a join, and the right subtree must be a table that exists in the database (picture an extremely unbalanced binary tree). The purpose of this restriction is to reduce the exponential space of possible query plans. In the case of Postgres, however, in addition to left-deep plans, right-deep plans and &ldquo;bushy&rdquo; plans are also considered. Right-deep plans are self-explanatory - plans where only the right-subtree can be the result of a join. Bushy plans are plans where both subtrees can be the result of a join.</p></li>
 
-<li><p>In addition to the traditional optimizer using the dynamic programming algorithm, Postgres also implements GEQO - Genetic Query Optimizer - which does query planning with heuristic search. In general, GEQO finds worse plans than the traditional optimizer, but it is faster since it does not consider as many plans, so Postgres uses the traditional optimizer when there are less than 12 relations being joined, and switched to GEQO when there are at least 12 relations (there is a configuration option <code>geqo_threshold</code> that defaults to 12 and can be tweaked). In any case, we won&rsquo;t elaborate on GEQO in this post anymore. This is already a pretty long post, and although genetic algorithms sound really cool, I don&rsquo;t want this to drag on for another 10 pages.</p></li>
+<li><p>In addition to the traditional optimizer using the dynamic programming algorithm, Postgres also implements GEQO - Genetic Query Optimizer - which does query planning with heuristic search. In general, GEQO finds worse plans than the traditional optimizer, but it is faster since it does not consider as many plans, so Postgres uses the traditional optimizer when there are less than 12 relations being joined, and switched to GEQO when there are at least 12 relations (there is a configuration option <code>geqo_threshold</code> that defaults to 12 and can be tweaked). In any case, we won&rsquo;t elaborate on GEQO here. This is already a pretty long post, and although genetic algorithms sound really cool, I don&rsquo;t want this to drag on for another 10 pages.</p></li>
 </ol>
 
 <p>Let&rsquo;s talk about the dyanmic programming algorithm, then! In fact, it&rsquo;s called the &ldquo;Selinger Optimizer&rdquo;.</p>
@@ -254,6 +254,10 @@ bestjoin[A,C,D] and bestjoin[B,C,D] are similar
 <p>After all this, we get the best plan to join the four relations A,B,C,D.</p>
 
 <p>It may not seem terribly effective at first, but at each iteration, we are actually re-using a lot of information computed from previous iterations, and thus saving a lot of CPU time. The exponential space of plans is unavoidable whether we choose to only consider left-deep plans, or all of left-deep, right-deep and bushy plans. Postgres also tries to be smart about this, and preemptively discard some joins that are obviously inefficient. For example, only joins between relations that share some attributes are considered (otherwise it would just be a cross-product).</p>
+
+<p>That&rsquo;s it! That&rsquo;s the basic framework of how Postgres does query optimization. Databases are incredibly complex stuff, but after writing this post I feel like I know them a little better. By the way, Postgres&rsquo; source code is pretty fun to look at. It&rsquo;s written in C, too, which, you know, isn&rsquo;t C++.</p>
+
+<p>Also, please let me know if there&rsquo;s anything confusing here, or if the text doesn&rsquo;t flow well. English is not my first language, and while I&rsquo;m confident these text should mostly make sense, I&rsquo;m not sure how comfortable it is to read to a native speaker.</p>
 
 	        </section>
 
