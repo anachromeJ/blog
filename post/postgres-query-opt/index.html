@@ -166,7 +166,7 @@ WHERE m.mid = n.mid AND n.year = 2016;
 <li><p>In addition to the traditional optimizer using the dynamic programming algorithm, Postgres also implements GEQO - Genetic Query Optimizer - which does query planning with heuristic search. In general, GEQO finds worse plans than the traditional optimizer, but it is faster since it does not consider as many plans, so Postgres uses the traditional optimizer when there are less than 12 relations being joined, and switched to GEQO when there are at least 12 relations (there is a configuration option <code>geqo_threshold</code> that defaults to 12 and can be tweaked). In any case, we won&rsquo;t elaborate on GEQO here. This is already a pretty long post, and although genetic algorithms sound really cool, I don&rsquo;t want this to drag on for another 10 pages.</p></li>
 </ol>
 
-<p>Let&rsquo;s talk about the dyanmic programming algorithm, then! In fact, it&rsquo;s called the &ldquo;Selinger Optimizer&rdquo;.</p>
+<p>Let&rsquo;s talk about the dynamic programming algorithm, then! In fact, it&rsquo;s called the &ldquo;Selinger Optimizer&rdquo;.</p>
 
 <h3 id="the-postgres-version-of-selinger-optimizer:2ff4998d21abeead8e3bebf18c3db905">The (Postgres&rsquo; version of) Selinger Optimizer</h3>
 
