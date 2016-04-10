@@ -99,7 +99,7 @@ WHERE m.mid = n.mid AND n.year = 2016;
 
 &lt;li&gt;&lt;p&gt;Block Nested Loops Join&lt;/p&gt;
 
-&lt;p&gt;Block nested loops join builds on top of simple nested loops join, and takes advantage of the buffer pool pages (RAM). The basic idea is to load the entire inner relation into memory, so no more I/O is necessary for the inner table. What&amp;rsquo;s left is just going through the outer table page by page, and then matching the tuples. Thus the total I/O cost is $p_Ap_B$.&lt;/p&gt;&lt;/li&gt;
+&lt;p&gt;Block nested loops join builds on top of simple nested loops join, and takes advantage of the buffer pool pages (RAM). The basic idea is to load the entire inner relation into memory, so no more I/O is necessary for the inner table. What&amp;rsquo;s left is just going through the outer table page by page, and then matching the tuples. Thus the total I/O cost is $p_A + p_B$.&lt;/p&gt;&lt;/li&gt;
 
 &lt;li&gt;&lt;p&gt;Index Nested Loops Join&lt;/p&gt;
 
