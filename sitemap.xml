@@ -3,8 +3,18 @@
   
   <url>
     <loc>http://jinchengli.me/</loc>
-    <lastmod>2016-03-19T00:00:00+00:00</lastmod>
+    <lastmod>2016-04-10T22:12:37-04:00</lastmod>
     <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://jinchengli.me/post/vm-intro/</loc>
+    <lastmod>2016-04-10T22:12:37-04:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://jinchengli.me/post/linux-booting/</loc>
+    <lastmod>2016-04-10T22:12:37-04:00</lastmod>
   </url>
   
   <url>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Assembly on Jincheng Li</title>
+    <link>http://jinchengli.me/tags/assembly/</link>
+    <description>Recent content in Assembly on Jincheng Li</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 10 Apr 2016 22:12:37 -0400</lastBuildDate>
+    <atom:link href="http://jinchengli.me/tags/assembly/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>What Happens When You Press the Power Button on Your Linux Computer</title>
+      <link>http://jinchengli.me/post/linux-booting/</link>
+      <pubDate>Sun, 10 Apr 2016 22:12:37 -0400</pubDate>
+      
+      <guid>http://jinchengli.me/post/linux-booting/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

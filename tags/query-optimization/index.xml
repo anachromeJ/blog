@@ -80,7 +80,7 @@ WHERE m.mid = n.mid AND n.year = 2016;
 
 &lt;h3 id=&#34;algorithms-for-relational-operators-mostly-joins:2ff4998d21abeead8e3bebf18c3db905&#34;&gt;Algorithms for Relational Operators (Mostly Joins)&lt;/h3&gt;
 
-&lt;p&gt;Now that we know how query plans are structured, we can go into more detail on the specific algorithms for evaluating relational operators. Before doing this, we need to have some meaningful measure of the performance of an algorithm. Conventionally, in a DBMS, the cost of an operation is considered in terms of the number of disk page I/Os. If some operation in a query plan reads two pages and writes one page, then its cost would be 3 I/Os. Postgres adopts a similar cost model, albeit a bit more nuisanced. It records not just the total cost of an operation, but also the start-up cost - cost before the first row can be returned. The start-up cost is useful for cases like an &lt;code&gt;EXISTS&lt;/code&gt; clause or a &lt;code&gt;LIMIT&lt;/code&gt; clause, where the query executor will stop after fetching the first couple of rows. For our discussion of algorithms here, cost simply refers to the total I/O cost.&lt;/p&gt;
+&lt;p&gt;Now that we know how query plans are structured, we can go into more detail on the specific algorithms for evaluating relational operators. Before doing this, we need to have some meaningful measure of the performance of an algorithm. Conventionally, in a DBMS, the cost of an operation is considered in terms of the number of disk page I/Os. If some operation in a query plan reads two pages and writes one page, then its cost would be 3 I/Os. Postgres adopts a similar cost model, albeit a bit more nuanced. It records not just the total cost of an operation, but also the start-up cost - cost before the first row can be returned. The start-up cost is useful for cases like an &lt;code&gt;EXISTS&lt;/code&gt; clause or a &lt;code&gt;LIMIT&lt;/code&gt; clause, where the query executor will stop after fetching the first couple of rows. For our discussion of algorithms here, cost simply refers to the total I/O cost.&lt;/p&gt;
 
 &lt;h4 id=&#34;everything-except-joins:2ff4998d21abeead8e3bebf18c3db905&#34;&gt;Everything Except Joins&lt;/h4&gt;
 
@@ -103,7 +103,7 @@ WHERE m.mid = n.mid AND n.year = 2016;
 
 &lt;li&gt;&lt;p&gt;Index Nested Loops Join&lt;/p&gt;
 
-&lt;p&gt;Index nested loops join is feasible when there is an index on the attribute being joined on of the inner table. This would potentially speed up finding a matching tuple in the inner table. For each tuple in the outer table, we now don&amp;rsquo;t have to scan the entire inner table, but simply use the index to find matching tuples. The cost of this method depends on the number of average matching tuples, and the type of index being used. It&amp;rsquo;s best for when there is a small number of matching tuples for each tuple in the outer relation.&lt;/p&gt;&lt;/li&gt;
+&lt;p&gt;Index nested loops join is feasible when there is an index on the attribute being joined on of the inner table. For each tuple in the outer table, we now don&amp;rsquo;t have to scan the entire inner table, but simply use the index to find matching tuples, which hopefully is faster. The cost of this method depends on the number of average matching tuples, and the type of index being used. It&amp;rsquo;s best for when there is a small number of matching tuples for each tuple in the outer relation.&lt;/p&gt;&lt;/li&gt;
 
 &lt;li&gt;&lt;p&gt;Sort Merge Join&lt;/p&gt;
 
