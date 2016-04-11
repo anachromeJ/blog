@@ -6,26 +6,8 @@
     <description>Recent content on Jincheng Li</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 10 Apr 2016 22:12:37 -0400</lastBuildDate>
+    <lastBuildDate>Sat, 19 Mar 2016 00:00:00 +0000</lastBuildDate>
     <atom:link href="http://jinchengli.me/index.xml" rel="self" type="application/rss+xml" />
-    
-    <item>
-      <title>Virtual Machines are Like Recursive Hardware</title>
-      <link>http://jinchengli.me/post/vm-intro/</link>
-      <pubDate>Sun, 10 Apr 2016 22:12:37 -0400</pubDate>
-      
-      <guid>http://jinchengli.me/post/vm-intro/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>What Happens When You Press the Power Button on Your Linux Computer</title>
-      <link>http://jinchengli.me/post/linux-booting/</link>
-      <pubDate>Sun, 10 Apr 2016 22:12:37 -0400</pubDate>
-      
-      <guid>http://jinchengli.me/post/linux-booting/</guid>
-      <description></description>
-    </item>
     
     <item>
       <title>PostgreSQL Query Optimization</title>
