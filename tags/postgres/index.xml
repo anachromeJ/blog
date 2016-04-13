@@ -130,7 +130,7 @@ WHERE m.mid = n.mid AND n.year = 2016;
 
 &lt;h3 id=&#34;the-postgres-version-of-selinger-optimizer:2ff4998d21abeead8e3bebf18c3db905&#34;&gt;The (Postgres&amp;rsquo; version of) Selinger Optimizer&lt;/h3&gt;
 
-&lt;p&gt;I don&amp;rsquo;t know if it&amp;rsquo;s just me, but when I was doing research on this topic, a lot of the text just referred to this as &amp;ldquo;dynamic programming algorithm for joins&amp;rdquo;, and not the Selinger Optimizer. People need to realize that everything should have a name, and the Selinger Optimizer sounds pretty nice.&lt;/p&gt;
+&lt;p&gt;I don&amp;rsquo;t know if it&amp;rsquo;s just me, but when I was doing research on this topic, a lot of the text just referred to this as &amp;ldquo;dynamic programming algorithm for joins&amp;rdquo;, and not the Selinger Optimizer. This needs a proper name, and the Selinger Optimizer sounds pretty nice.&lt;/p&gt;
 
 &lt;p&gt;So, we&amp;rsquo;re tasked with finding the best join order for a set of $N$ relations. What do we do now? Selinger Optimizer does this by iterating on the number of relations $i$ being considered, starting from 1. On iteration $i$, we compute the best plan to join $i$ relations out of the total $N$ relations together. Note that there are $N \choose i$ possible combinations for iteration $i$. We do this repeatedly until $i$ reaches $N$, at which point we&amp;rsquo;ve found the best join order for the $N$ relations.&lt;/p&gt;
 
