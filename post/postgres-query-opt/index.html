@@ -42,7 +42,7 @@
 	<h1 class="blog-title"><a href="http://jinchengli.me/">Jincheng Li</a></h1>
 	
 	
-	<h1 class="blog-subtitle">because&hellip; magic!</h1>
+	<h1 class="blog-subtitle">¯\<em>(ツ)</em>/¯</h1>
 	
 </header>
     
@@ -51,7 +51,7 @@
 	    <article class="post">
 	        <header>
 	        <h1 class="post-title">PostgreSQL Query Optimization</h1>
-	        <div class="post-meta"><time datetime="19 March 2016">19 March 2016</time></div>
+	        <div class="post-meta"><time datetime="08 April 2016">08 April 2016</time></div>
 	        </header>
 
 	        <section class="post-content">
@@ -76,7 +76,7 @@
 <li>evaluate the cost of each plan, and pick the one with the lowest cost</li>
 </ol>
 
-<p>The details of how each DBMS chooses to implement steps 1 and 2 vary, but this 2-step process applies to most relational query optimizers, including Postgres. In order to understand this process, we need to know a little bit more about query evaluation plans, algorithms for evaluating relational operators, and analysis of costs. Let&rsquo;s start with query evaluation plans.</p>
+<p>The details of how each DBMS chooses to implement steps 1 and 2 vary, but this 2-step process applies to most relational query optimizers, including postgres. In order to understand this process, we need to know a little bit more about query evaluation plans, algorithms for evaluating relational operators, and analysis of costs. Let&rsquo;s start with query evaluation plans.</p>
 
 <h3 id="query-evaluation-plans:2ff4998d21abeead8e3bebf18c3db905">Query Evaluation Plans</h3>
 
@@ -170,7 +170,7 @@ WHERE m.mid = n.mid AND n.year = 2016;
 
 <h3 id="the-postgres-version-of-selinger-optimizer:2ff4998d21abeead8e3bebf18c3db905">The (Postgres&rsquo; version of) Selinger Optimizer</h3>
 
-<p>I don&rsquo;t know if it&rsquo;s just me, but when I was doing research on this topic, a lot of the text just referred to this as &ldquo;dynamic programming algorithm for joins&rdquo;, and not the Selinger Optimizer. This needs a proper name, and the Selinger Optimizer sounds pretty nice.</p>
+<p>I don&rsquo;t know if it&rsquo;s just me, but when I was doing research on this topic, a lot of the text just referred to this as &ldquo;dynamic programming algorithm for joins&rdquo;, and not the Selinger Optimizer. It needs a proper name, and the Selinger Optimizer sounds pretty nice.</p>
 
 <p>So, we&rsquo;re tasked with finding the best join order for a set of $N$ relations. What do we do now? Selinger Optimizer does this by iterating on the number of relations $i$ being considered, starting from 1. On iteration $i$, we compute the best plan to join $i$ relations out of the total $N$ relations together. Note that there are $N \choose i$ possible combinations for iteration $i$. We do this repeatedly until $i$ reaches $N$, at which point we&rsquo;ve found the best join order for the $N$ relations.</p>
 
@@ -253,11 +253,11 @@ bestjoin[A,C,D] and bestjoin[B,C,D] are similar
 
 <p>After all this, we get the best plan to join the four relations A,B,C,D.</p>
 
-<p>It may not seem terribly effective at first, but at each iteration, we are actually re-using a lot of information computed from previous iterations, and thus saving a lot of CPU time. The exponential space of plans is unavoidable whether we choose to only consider left-deep plans, or all of left-deep, right-deep and bushy plans. Postgres also tries to be smart about this, and preemptively discard some joins that are obviously inefficient. For example, only joins between relations that share some attributes are considered (otherwise it would just be a cross-product).</p>
+<p>It may not seem terribly effective at first, but at each iteration, we are actually re-using a lot of information computed from previous iterations, and thus saving a lot of CPU time. The exponential space of plans is unavoidable whether we choose to only consider left-deep plans, or all of left-deep, right-deep and bushy plans. Postgres also tries to be smart about this, and preemptively discards some joins that are obviously inefficient. For example, only joins between relations that share some attributes are considered (otherwise it would just be a cross-product).</p>
 
 <p>That&rsquo;s it! That&rsquo;s the basic framework of how Postgres does query optimization. Databases are incredibly complex stuff, but after writing this post I feel like I know them a little better. By the way, Postgres&rsquo; source code is pretty fun to look at. It&rsquo;s written in C, too, which, you know, isn&rsquo;t C++.</p>
 
-<p>Also, please let me know if there&rsquo;s anything confusing here, or if the text doesn&rsquo;t flow well. English is not my first language, and while I&rsquo;m confident these text should mostly make sense, I&rsquo;m not sure how comfortable it is to read to a native speaker.</p>
+<p>Also, please let me know if there&rsquo;s anything inaccurate/confusing here, or if the text doesn&rsquo;t flow well. English is not my first language, and while I&rsquo;m confident this text should mostly make sense, I&rsquo;m not sure how comfortable it is to read to a native speaker.</p>
 
 	        </section>
 
@@ -315,7 +315,7 @@ bestjoin[A,C,D] and bestjoin[B,C,D] are similar
 	            <section class="author">
     <div class="authorimage" style="background:  url(http://jinchengli.me/img/avatar.jpg)"></div>
     <h4>Jincheng Li</h4>
-    <p class="bio">CS student @ Columbia</p>
+    <p class="bio">CS @ Columbia</p>
     <p class="meta">
       
     </p>
@@ -332,7 +332,7 @@ bestjoin[A,C,D] and bestjoin[B,C,D] are similar
 		    <a href="//twitter.com/AnachromeJ" target="_blank" title="Twitter"><i class="fa fa-2x fa-fw fa-twitter"></i> <span class="hidden">Twitter</span></a>&nbsp;
 		    
 		    
-		    <a href="//github.com/jchli" target="_blank" title="GitHub"><i class="fa fa-2x fa-fw fa-github"></i> <span class="hidden">GitHub</span></a>&nbsp;
+		    <a href="//github.com/anachromeJ" target="_blank" title="GitHub"><i class="fa fa-2x fa-fw fa-github"></i> <span class="hidden">GitHub</span></a>&nbsp;
 		    
 		    
 		</section>
