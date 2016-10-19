@@ -1,0 +1,3 @@
+[submodule "serverless"]
+	path = serverless
+	url = git@github.com:anachromeJ/serverless.git
