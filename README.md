@@ -1,2 +1,2 @@
 # Personal Blog
-[jinchengli.me](http://jinchengli.me)
+[jincheng.li](http://jincheng.li)
