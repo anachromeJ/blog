@@ -2,61 +2,22 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Linux on Jincheng Li</title>
-    <link>http://jinchengli.me/tags/linux/</link>
+    <link>http://jincheng.li/tags/linux/</link>
     <description>Recent content in Linux on Jincheng Li</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sun, 10 Jul 2016 22:12:37 -0400</lastBuildDate>
-    <atom:link href="http://jinchengli.me/tags/linux/index.xml" rel="self" type="application/rss+xml" />
+    
+	<atom:link href="http://jincheng.li/tags/linux/index.xml" rel="self" type="application/rss+xml" />
+    
     
     <item>
       <title>What Happens When You Press the Power Button on Your Linux Computer</title>
-      <link>http://jinchengli.me/post/linux-booting/</link>
+      <link>http://jincheng.li/post/linux-booting/</link>
       <pubDate>Sun, 10 Jul 2016 22:12:37 -0400</pubDate>
       
-      <guid>http://jinchengli.me/post/linux-booting/</guid>
-      <description>
-
-&lt;!---
-After taking an OS course in college, I always had this nagging feeling that I still don&#39;t have a full grasp of the architecture of an OS, even though I&#39;m sort of close. This is my attempt to [probably approximately](https://en.wikipedia.org/wiki/Probably_approximately_correct_learning) get there.
---&gt;
-
-&lt;p&gt;I wanted to start a series of posts detailing how the Linux operating system works, more or less like &lt;a href=&#34;https://0xax.gitbooks.io/linux-insides/content/&#34;&gt;linux-insides&lt;/a&gt;, but instead of covering the entire operating system (which is way too much work for my lazy ass), I&amp;rsquo;ll focus on several aspects of the OS and try to do a good job researching and explaining them &amp;ndash; I&amp;rsquo;m hoping to make this comprehensible for someone who&amp;rsquo;s seen some assembly and C, but isn&amp;rsquo;t necessarily familiar with the internals of an OS.&lt;/p&gt;
-
-&lt;p&gt;My motivation for doing this is mainly to learn more about OSes and fill in any knowledge gaps I have. I&amp;rsquo;m in no way an expert on the topic, so please feel free to correct me if anything here looks inaccurate.&lt;/p&gt;
-
-&lt;p&gt;This first post is going to be about the booting process, from pressing the power button to seeing your desktop background. Booting involves a lot of intricate low-level details and some hardware knowledge, but it&amp;rsquo;s all very fascinating and should be manageable as long as you know some assembly. I will make sure to explain all the terminology along the way.&lt;/p&gt;
-
-&lt;h2 id=&#34;pressing-the-button-https-en-wikipedia-org-wiki-the-button-reddit:cbde186d40f918d55b660bbcf3d91af4&#34;&gt;Pressing &lt;a href=&#34;https://en.wikipedia.org/wiki/The_Button_(Reddit&#34;&gt;the Button&lt;/a&gt;&lt;/h2&gt;
-
-&lt;p&gt;Buttons are great, especially those that hide incredibly complicated logic behind them to make them almost seem like magic. So what happens when you press the magical power button on a Linux computer?&lt;/p&gt;
-
-&lt;p&gt;Recall (or not) that personal computers are composed of a number of crucial components: CPU, BIOS/UEFI, RAM, hard disk, keyboard, mouse, monitor, etc. All of these components are connected through the &lt;a href=&#34;https://en.wikipedia.org/wiki/Motherboard&#34;&gt;motherboard&lt;/a&gt; &amp;ndash; a large electric circuit board responsible for transferring data between the different components. If you&amp;rsquo;ve ever DIY&amp;rsquo;d a personal computer, you&amp;rsquo;d probably know that the process essentially consists of sticking every piece of hardware you bought onto the motherboard and then putting it inside a box.&lt;/p&gt;
-
-&lt;p&gt;Now, back to our discussion of the power button. The power button, like everything else, is also attached to the motherboard, which in turn is connected to the &lt;a href=&#34;https://en.wikipedia.org/wiki/Power_supply_unit_(computer&#34;&gt;power supply unit (PSU)&lt;/a&gt; &amp;ndash; this is also where you usually plug your power cord to the computer. When you press the power button, the motherboard sends a signal to the PSU to activate it, providing the motherboard and all other components with proper electricity. As a result of this, all the fans start spinning, the indication lights turn on, the hard drives and the CPU start running, etc.&lt;/p&gt;
-
-&lt;h2 id=&#34;interupts-and-how-things-appear-on-the-monitor:cbde186d40f918d55b660bbcf3d91af4&#34;&gt;Interupts and how things appear on the monitor&lt;/h2&gt;
-
-&lt;p&gt;The first step after the computer turns on is executing code stored in the BIOS, but before we dive into that, let&amp;rsquo;s get some basics right. The BIOS is probably not the first thing you think of after hearing the fans start spinning &amp;ndash; usually you might notice a boot screen pop up with a logo of some manufacturer, while at the bottom of the screen there&amp;rsquo;s some text along the lines of &amp;ldquo;Press F2 to enter SETUP&amp;rdquo;. Then before you can read through it, whatever operating system is installed kicks in. So, just to be clear, at this point the computer is already executing BIOS code, which is responsible for putting things on the monitor. But how is it doing that? We are not even running an operating system yet. There is no built-in system calls that you can just use to print text, or show color, or read from disk, etc.&lt;/p&gt;
-
-&lt;p&gt;This part confused me for a bit and I had to look it up to understand what&amp;rsquo;s going on. There is a leap from software to hardware involved here.&lt;/p&gt;
-
-&lt;!-- TODO if you are coming back to write this and don&#39;t remember what&#39;s going on: read wiki on interrupts, software interupts allows CPU to control hardware and hardware interrupts alert CPU. Then there are hardware reserved memory locations to pass around operation paramters for hardware to work with. --&gt;
-
-&lt;!-- ## How software translates to hardware ## --&gt;
-
-&lt;!-- This is the part about computers that seem most like magic to me -- you can just write code to let hardware do things. I mean, how do you get from numbers and plus/minus operaters to the screen lighting up? --&gt;
-
-&lt;!-- Well, you don&#39;t. Not really. All software eventually gets translated into machine code that&#39;s executed by the CPU. While one of the most impressive part about CPUs is that they can perform arithmetic operations, controlling hardware is an entirely different matter. Typically hardware is controlled by software interrupts and hardware-reserved memory.  --&gt;
-
-&lt;h2 id=&#34;bios:cbde186d40f918d55b660bbcf3d91af4&#34;&gt;BIOS&lt;/h2&gt;
-
-&lt;p&gt;The first piece of code the computer runs after powering on is stored in the &lt;a href=&#34;https://en.wikipedia.org/wiki/BIOS&#34;&gt;BIOS&lt;/a&gt; firmware. Once the CPU starts, it needs to start processing instructions, and it finds the first instruction to execute at the &lt;a href=&#34;https://en.wikipedia.org/wiki/Reset_vector&#34;&gt;Reset vector&lt;/a&gt;. This is usually just a memory address that&amp;rsquo;s hardcoded as part of hardware design. For x86 processors, the reset vector is at address FFFF0h - 16 bytes below 1MB.&lt;/p&gt;
-
-&lt;h2 id=&#34;real-mode:cbde186d40f918d55b660bbcf3d91af4&#34;&gt;Real Mode&lt;/h2&gt;
-
-&lt;h2 id=&#34;links:cbde186d40f918d55b660bbcf3d91af4&#34;&gt;Links&lt;/h2&gt;
-</description>
+      <guid>http://jincheng.li/post/linux-booting/</guid>
+      <description>I wanted to start a series of posts on how the Linux operating system works, inspired by linux-insides, but instead of covering the entire operating system which is way too much work for my lazy ass, I&amp;rsquo;ll focus on several aspects of the OS and try to do a good job explaining them &amp;ndash; I&amp;rsquo;m hoping to make this comprehensible for someone who&amp;rsquo;s seen some assembly and C, but isn&amp;rsquo;t necessarily familiar with the internals of an OS.</description>
     </item>
     
   </channel>

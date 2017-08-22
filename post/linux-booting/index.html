@@ -7,7 +7,7 @@
     <title>What Happens When You Press the Power Button on Your Linux Computer &middot; Jincheng Li</title>
     <meta name="author" content="Jincheng Li">
     <meta name="description" content="">
-    <meta name="generator" content="Hugo 0.15" />
+    <meta name="generator" content="Hugo 0.26" />
     <meta name="HandheldFriendly" content="True">
     <meta name="MobileOptimized" content="320">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -15,12 +15,12 @@
     <!-- RSS autodiscovery -->
     
 
-    <link rel="shortcut icon" type="image/x-icon" href="http://jinchengli.me/img/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="http://jincheng.li/img/favicon.ico">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/2.1.2/normalize.min.css">
 
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="http://jinchengli.me/css/screen.css">
-    <link rel="stylesheet" href="http://jinchengli.me/css/github.css">
+    <link rel="stylesheet" href="http://jincheng.li/css/screen.css">
+    <link rel="stylesheet" href="http://jincheng.li/css/github.css">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/styles/default.min.css">
 
     <!-- Stylesheet for theme color -->
@@ -39,10 +39,8 @@
 
     <header id="site-head">
 	
-	<h1 class="blog-title"><a href="http://jinchengli.me/">Jincheng Li</a></h1>
+	<h1 class="blog-title"><a href="http://jincheng.li/">Jincheng Li</a></h1>
 	
-	
-	<h1 class="blog-subtitle">that&rsquo;s incredible</h1>
 	
 </header>
     
@@ -57,45 +55,51 @@
 	        <section class="post-content">
 	            
 
-<!---
-After taking an OS course in college, I always had this nagging feeling that I still don't have a full grasp of the architecture of an OS, even though I'm sort of close. This is my attempt to [probably approximately](https://en.wikipedia.org/wiki/Probably_approximately_correct_learning) get there.
--->
-
-<p>I wanted to start a series of posts detailing how the Linux operating system works, more or less like <a href="https://0xax.gitbooks.io/linux-insides/content/">linux-insides</a>, but instead of covering the entire operating system (which is way too much work for my lazy ass), I&rsquo;ll focus on several aspects of the OS and try to do a good job researching and explaining them &ndash; I&rsquo;m hoping to make this comprehensible for someone who&rsquo;s seen some assembly and C, but isn&rsquo;t necessarily familiar with the internals of an OS.</p>
+<p>I wanted to start a series of posts on how the Linux operating system works, inspired by <a href="https://0xax.gitbooks.io/linux-insides/content/">linux-insides</a>, but instead of covering the entire operating system which is way too much work for my lazy ass, I&rsquo;ll focus on several aspects of the OS and try to do a good job explaining them &ndash; I&rsquo;m hoping to make this comprehensible for someone who&rsquo;s seen some assembly and C, but isn&rsquo;t necessarily familiar with the internals of an OS.</p>
 
 <p>My motivation for doing this is mainly to learn more about OSes and fill in any knowledge gaps I have. I&rsquo;m in no way an expert on the topic, so please feel free to correct me if anything here looks inaccurate.</p>
 
 <p>This first post is going to be about the booting process, from pressing the power button to seeing your desktop background. Booting involves a lot of intricate low-level details and some hardware knowledge, but it&rsquo;s all very fascinating and should be manageable as long as you know some assembly. I will make sure to explain all the terminology along the way.</p>
 
-<h2 id="pressing-the-button-https-en-wikipedia-org-wiki-the-button-reddit:cbde186d40f918d55b660bbcf3d91af4">Pressing <a href="https://en.wikipedia.org/wiki/The_Button_(Reddit">the Button</a></h2>
+<h2 id="review-of-basic-computer-architecture">Review of Basic Computer Architecture</h2>
 
-<p>Buttons are great, especially those that hide incredibly complicated logic behind them to make them almost seem like magic. So what happens when you press the magical power button on a Linux computer?</p>
+<p>Before diving into the booting process, let&rsquo;s review some basics about computer architecture. Sometimes I find it easy to lose track of the fundamental building blocks when you are deep into the intricacies of complex systems. Plus I don&rsquo;t think schools necessarily cover all of this in a typical computer science program anymore (or maybe they do but I wasn&rsquo;t paying attention).</p>
 
-<p>Recall (or not) that personal computers are composed of a number of crucial components: CPU, BIOS/UEFI, RAM, hard disk, keyboard, mouse, monitor, etc. All of these components are connected through the <a href="https://en.wikipedia.org/wiki/Motherboard">motherboard</a> &ndash; a large electric circuit board responsible for transferring data between the different components. If you&rsquo;ve ever DIY&rsquo;d a personal computer, you&rsquo;d probably know that the process essentially consists of sticking every piece of hardware you bought onto the motherboard and then putting it inside a box.</p>
+<p><img src="/img/von_neumann.svg" alt="von_neumann" /></p>
 
-<p>Now, back to our discussion of the power button. The power button, like everything else, is also attached to the motherboard, which in turn is connected to the <a href="https://en.wikipedia.org/wiki/Power_supply_unit_(computer">power supply unit (PSU)</a> &ndash; this is also where you usually plug your power cord to the computer. When you press the power button, the motherboard sends a signal to the PSU to activate it, providing the motherboard and all other components with proper electricity. As a result of this, all the fans start spinning, the indication lights turn on, the hard drives and the CPU start running, etc.</p>
+<p>Computers we use today roughly follow the <a href="https://en.wikipedia.org/wiki/Von_Neumann_architecture">von Neumann architecture</a> as shown above, with three major components &ndash; CPU, I/O devices, and memory &ndash; connected over <a href="https://en.wikipedia.org/wiki/Bus_(computing)">buses</a> (wires). The computer works as the CPU executes instructions that either read/write to memory, or interact with I/O devices. The important thing to note here is that from the software perspective, this model is pretty much all there is to a computer. <em>Every</em> piece of software eventually gets translated into machine instructions that the CPU carries out, which then interacts with other devices. This includes every piece of software this article covers, and in particular every line of code in the Linux operating system.</p>
 
-<h2 id="interupts-and-how-things-appear-on-the-monitor:cbde186d40f918d55b660bbcf3d91af4">Interupts and how things appear on the monitor</h2>
+<p>So the CPU communicates with two different types of components: I/O and memory. Correspondingly there are roughly two different types communication channels: the northbridge and the southbridge. These are chipsets that you could see on a motherboard. The northbridge is closer to the CPU and responsible for communications requiring high performance (i.e. memory, and sometimes a video card), while all other devices go through the southbridge.</p>
 
-<p>The first step after the computer turns on is executing code stored in the BIOS, but before we dive into that, let&rsquo;s get some basics right. The BIOS is probably not the first thing you think of after hearing the fans start spinning &ndash; usually you might notice a boot screen pop up with a logo of some manufacturer, while at the bottom of the screen there&rsquo;s some text along the lines of &ldquo;Press F2 to enter SETUP&rdquo;. Then before you can read through it, whatever operating system is installed kicks in. So, just to be clear, at this point the computer is already executing BIOS code, which is responsible for putting things on the monitor. But how is it doing that? We are not even running an operating system yet. There is no built-in system calls that you can just use to print text, or show color, or read from disk, etc.</p>
+<p><img src="/img/motherboard.svg" alt="motherboard" /></p>
 
-<p>This part confused me for a bit and I had to look it up to understand what&rsquo;s going on. There is a leap from software to hardware involved here.</p>
+<p>Okay great, now we know the CPU talks to other components through &lsquo;bridges&rsquo;, but how exactly does the communication happen? What data is passed through and what kind of CPU instructions do we use?</p>
+
+<p>The process is pretty straightforward for reading/writing memory: in this case the CPU simply writes the address it wants to read from / write to to a register, and waits for the memory controller to notice.</p>
+
+<!-- The first step after the computer turns on is executing code stored in the BIOS, but before we dive into that, let's get some basics right. The BIOS is probably not the first thing you think of after hearing the fans start spinning -- usually you might notice a boot screen pop up with a logo of some manufacturer, while at the bottom of the screen there's some text along the lines of "Press F2 to enter SETUP". Then before you can read through it, whatever operating system is installed kicks in. So, just to be clear, at this point the computer is already executing BIOS code, which is responsible for putting things on the monitor. But how is it doing that? We are not even running an operating system yet. There is no built-in system calls that you can just use to print text, or show color, or read from disk, etc. -->
 
 <!-- TODO if you are coming back to write this and don't remember what's going on: read wiki on interrupts, software interupts allows CPU to control hardware and hardware interrupts alert CPU. Then there are hardware reserved memory locations to pass around operation paramters for hardware to work with. -->
 
-<!-- ## How software translates to hardware ## -->
+<p>This is achieved through <a href="https://en.wikipedia.org/wiki/Interrupt">interrupts</a>.</p>
 
-<!-- This is the part about computers that seem most like magic to me -- you can just write code to let hardware do things. I mean, how do you get from numbers and plus/minus operaters to the screen lighting up? -->
+<h2 id="pressing-the-button-https-en-wikipedia-org-wiki-the-button-reddit">Pressing <a href="https://en.wikipedia.org/wiki/The_Button_(Reddit)">the Button</a></h2>
 
-<!-- Well, you don't. Not really. All software eventually gets translated into machine code that's executed by the CPU. While one of the most impressive part about CPUs is that they can perform arithmetic operations, controlling hardware is an entirely different matter. Typically hardware is controlled by software interrupts and hardware-reserved memory.  -->
+<p>Buttons are great, especially those that hide incredibly complicated logic behind them to make them almost seem like magic. So what happens when you press the magical power button on a Linux computer?</p>
 
-<h2 id="bios:cbde186d40f918d55b660bbcf3d91af4">BIOS</h2>
+<p>Recall (or not) that personal computers are composed of a number of components: CPU, BIOS/UEFI, RAM, hard disk, keyboard, mouse, monitor, etc. All of these components are connected through the <a href="https://en.wikipedia.org/wiki/Motherboard">motherboard</a> &ndash; a large circuit board responsible for transferring data between the different components. If you&rsquo;ve ever DIY&rsquo;d a personal computer, you&rsquo;d probably know that the process essentially consists of sticking every piece of hardware you bought onto the motherboard and then putting it inside a box.</p>
 
-<p>The first piece of code the computer runs after powering on is stored in the <a href="https://en.wikipedia.org/wiki/BIOS">BIOS</a> firmware. Once the CPU starts, it needs to start processing instructions, and it finds the first instruction to execute at the <a href="https://en.wikipedia.org/wiki/Reset_vector">Reset vector</a>. This is usually just a memory address that&rsquo;s hardcoded as part of hardware design. For x86 processors, the reset vector is at address FFFF0h - 16 bytes below 1MB.</p>
+<p>The power button, like everything else, is also attached to the motherboard, which in turn is connected to the <a href="https://en.wikipedia.org/wiki/Power_supply_unit_(computer)">power supply unit (PSU)</a> &ndash; this is usually where you plug your power cord into the computer. When you press the power button, the motherboard sends a signal to the PSU to activate it, providing the motherboard and all other components with proper electricity. As a result of this, all the fans start spinning and whirring, the indication lights turn on, the hard drives and the CPU start running, etc.</p>
 
-<h2 id="real-mode:cbde186d40f918d55b660bbcf3d91af4">Real Mode</h2>
+<p>So now we&rsquo;ve supplied the different pieces of a computer with electricity. What happens next?</p>
 
-<h2 id="links:cbde186d40f918d55b660bbcf3d91af4">Links</h2>
+<h2 id="bios">BIOS</h2>
+
+<p>The first piece of code the computer runs after powering on is stored in the <a href="https://en.wikipedia.org/wiki/BIOS">BIOS</a> firmware. Once the CPU starts, it finds the first instruction to execute at the <a href="https://en.wikipedia.org/wiki/Reset_vector">Reset vector</a>. This is usually just a memory address that&rsquo;s hardcoded as part of the CPU design. For x86 processors, the reset vector is at address <code>FFFF0h</code> - 16 bytes below 1MB. This address itself is not an address in the BIOS, but is mapped to some ROM storage unit on the motherboard. The motherboard ensures that this address contains a jump instruction to the BIOS, so as soon as this instruction is executed, BIOS code kicks in.</p>
+
+<h2 id="real-mode">Real Mode</h2>
+
+<h2 id="links">Links</h2>
 
 	        </section>
 
@@ -103,29 +107,34 @@ After taking an OS course in college, I always had this nagging feeling that I s
 	            <div class="post-meta tags">
 	            <i class="fa fa-fw fa-tag"></i>
 	            
-	            <a href="http://jinchengli.me/tags/linux">linux </a>
+	            <a href="http://jincheng.li/tags/linux">linux </a>
 	            
-	            <a href="http://jinchengli.me/tags/booting">booting </a>
+	            <a href="http://jincheng.li/tags/booting">booting </a>
 	            
-	            <a href="http://jinchengli.me/tags/assembly">assembly </a>
+	            <a href="http://jincheng.li/tags/assembly">assembly </a>
 	            
-	            <a href="http://jinchengli.me/tags/os-series">os-series </a>
+	            <a href="http://jincheng.li/tags/os-series">os-series </a>
 	            
 	            </div>
 	        </section>
 			
 			
 	        	<div id="disqus_thread"></div>
-<script type="text/javascript">
-    var disqus_shortname = 'jchli';
-    var disqus_identifier = 'http:\/\/jinchengli.me\/post\/linux-booting\/';
-    var disqus_title = 'What Happens When You Press the Power Button on Your Linux Computer';
-    var disqus_url = 'http:\/\/jinchengli.me\/post\/linux-booting\/';
-
+<script>
+    var disqus_config = function () {
+    
+    
+    
+    };
     (function() {
-        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "jchli" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
     })();
 </script>
 <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
@@ -137,15 +146,15 @@ After taking an OS course in college, I always had this nagging feeling that I s
 	        <section class="share">
 	            <p class="backtotop"><a data-scroll href="#site-head"><i class="fa fa-lg fa-fw fa-angle-double-up"></i></a><a data-scroll class="backtotoptext" href="#site-head"> Back to top</a></p>
 	            <p class="info prompt">Share</p>
-	            <a href="http://twitter.com/share?text=What%20Happens%20When%20You%20Press%20the%20Power%20Button%20on%20Your%20Linux%20Computer&url=http%3a%2f%2fjinchengli.me%2fpost%2flinux-booting%2f" title="Share on Twitter"
+	            <a href="http://twitter.com/share?text=What%20Happens%20When%20You%20Press%20the%20Power%20Button%20on%20Your%20Linux%20Computer&url=http%3a%2f%2fjincheng.li%2fpost%2flinux-booting%2f" title="Share on Twitter"
 	                onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
 	                <i class="fa fa-2x fa-fw fa-twitter-square"></i> <span class="hidden">Twitter</span>
 	            </a>
-	            <a href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fjinchengli.me%2fpost%2flinux-booting%2f" title="Share on Facebook"
+	            <a href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fjincheng.li%2fpost%2flinux-booting%2f" title="Share on Facebook"
 	                onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
 	                <i class="fa fa-2x fa-fw fa-facebook-square" style="margin-left: -8px"></i> <span class="hidden">Facebook</span>
 	            </a>
-	            <a href="https://plus.google.com/share?url=http%3a%2f%2fjinchengli.me%2fpost%2flinux-booting%2f" title="Share on Google+"
+	            <a href="https://plus.google.com/share?url=http%3a%2f%2fjincheng.li%2fpost%2flinux-booting%2f" title="Share on Google+"
 	               onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
 	                <i class="fa fa-2x fa-fw fa-google-plus-square" style="margin-left: -8px"></i> <span class="hidden">Google+</span>
 	            </a>
@@ -153,9 +162,9 @@ After taking an OS course in college, I always had this nagging feeling that I s
 
 	        <footer class="post-footer">
 	            <section class="author">
-    <div class="authorimage" style="background:  url(http://jinchengli.me/img/avatar.jpg)"></div>
+    <div class="authorimage" style="background:  url(http://jincheng.li/img/avatar.jpg)"></div>
     <h4>Jincheng Li</h4>
-    <p class="bio">CS student @ Columbia</p>
+    <p class="bio">just another engineer</p>
     <p class="meta">
       
     </p>
@@ -172,18 +181,18 @@ After taking an OS course in college, I always had this nagging feeling that I s
 		    <a href="//twitter.com/AnachromeJ" target="_blank" title="Twitter"><i class="fa fa-2x fa-fw fa-twitter"></i> <span class="hidden">Twitter</span></a>&nbsp;
 		    
 		    
-		    <a href="//github.com/jchli" target="_blank" title="GitHub"><i class="fa fa-2x fa-fw fa-github"></i> <span class="hidden">GitHub</span></a>&nbsp;
+		    <a href="//github.com/jinchengJL" target="_blank" title="GitHub"><i class="fa fa-2x fa-fw fa-github"></i> <span class="hidden">GitHub</span></a>&nbsp;
 		    
 		    
 		</section>
 
-		<section class="copyright">&copy; 2016 <a href="http://jinchengli.me/">Jincheng Li</a>. </section>
+		<section class="copyright">&copy; 2017 <a href="http://jincheng.li/">Jincheng Li</a>. </section>
 	</div>
 </footer>
 
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-<script src="http://jinchengli.me/js/index.js"></script>
-<script src="http://jinchengli.me/js/smooth-scroll.min.js"></script>
+<script src="http://jincheng.li/js/index.js"></script>
+<script src="http://jincheng.li/js/smooth-scroll.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/highlight.min.js"></script>
 <script type="text/javascript"
   src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">

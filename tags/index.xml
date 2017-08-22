@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tags on Jincheng Li</title>
+    <link>http://jincheng.li/tags/</link>
+    <description>Recent content in Tags on Jincheng Li</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 10 Jul 2016 22:12:37 -0400</lastBuildDate>
+    
+	<atom:link href="http://jincheng.li/tags/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Assembly</title>
+      <link>http://jincheng.li/tags/assembly/</link>
+      <pubDate>Sun, 10 Jul 2016 22:12:37 -0400</pubDate>
+      
+      <guid>http://jincheng.li/tags/assembly/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Booting</title>
+      <link>http://jincheng.li/tags/booting/</link>
+      <pubDate>Sun, 10 Jul 2016 22:12:37 -0400</pubDate>
+      
+      <guid>http://jincheng.li/tags/booting/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Database</title>
+      <link>http://jincheng.li/tags/database/</link>
+      <pubDate>Fri, 08 Apr 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://jincheng.li/tags/database/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Linux</title>
+      <link>http://jincheng.li/tags/linux/</link>
+      <pubDate>Sun, 10 Jul 2016 22:12:37 -0400</pubDate>
+      
+      <guid>http://jincheng.li/tags/linux/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Misc</title>
+      <link>http://jincheng.li/tags/misc/</link>
+      <pubDate>Mon, 21 Aug 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://jincheng.li/tags/misc/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Os Series</title>
+      <link>http://jincheng.li/tags/os-series/</link>
+      <pubDate>Sun, 10 Jul 2016 22:12:37 -0400</pubDate>
+      
+      <guid>http://jincheng.li/tags/os-series/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Postgres</title>
+      <link>http://jincheng.li/tags/postgres/</link>
+      <pubDate>Fri, 08 Apr 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://jincheng.li/tags/postgres/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Query Optimization</title>
+      <link>http://jincheng.li/tags/query-optimization/</link>
+      <pubDate>Fri, 08 Apr 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://jincheng.li/tags/query-optimization/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

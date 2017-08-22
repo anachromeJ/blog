@@ -6,8 +6,19 @@
     <description>Recent content in Misc on Jincheng Li</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 13 Mar 2016 00:00:00 +0000</lastBuildDate>
-    <atom:link href="http://jincheng.li/tags/misc/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 21 Aug 2017 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="http://jincheng.li/tags/misc/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Transitioning to Notebook Style</title>
+      <link>http://jincheng.li/post/notebook/</link>
+      <pubDate>Mon, 21 Aug 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://jincheng.li/post/notebook/</guid>
+      <description>I realized that if I&amp;rsquo;m going to keep every article in the blog well thought-out and organized it&amp;rsquo;d take me several full days to complete each one. The result is that my last article was over a year ago and I may never finish another one again. I still want to keep this blog alive, so I&amp;rsquo;m just going to use it as a space for notebook-style writings. Hopefully it&amp;rsquo;ll still be useful to strangers on the Internet, and if not I&amp;rsquo;ll just be happy there&amp;rsquo;s a public repo of what I used to know at one point in my life :).</description>
+    </item>
     
     <item>
       <title>Why This Blog</title>
@@ -15,12 +26,7 @@
       <pubDate>Sun, 13 Mar 2016 00:00:00 +0000</pubDate>
       
       <guid>http://jincheng.li/post/first-post/</guid>
-      <description>&lt;p&gt;This is probably my last year as a student, when I still have a lot of freedom allocating my time. In the hopes of putting my spare time to better use than playing Witcher 3 and Hearthstone, I decided to start writing some technical articles. This would be a good opportunity for me to do some research into things I never dedicate enough time to understand, and hopefully benefit whoever chances upon this little blog :)&lt;/p&gt;
-
-&lt;p&gt;Also I haven&amp;rsquo;t tried to start a website for about 3 years now, and as I&amp;rsquo;m starting to find out, it&amp;rsquo;s &lt;em&gt;unbelievably&lt;/em&gt; easy to spin up something like this. No wonder everyone has their own blog these days and they all look so pretty (I&amp;rsquo;m currently using Hugo, Github Pages and Namecheap for this site).&lt;/p&gt;
-
-&lt;p&gt;Cheers!&lt;/p&gt;
-</description>
+      <description>This is probably my last year as a student, when I still have a lot of freedom allocating my time. In the hopes of putting my spare time to better use than playing Witcher 3 and Hearthstone, I decided to start writing some technical articles. This would be a good opportunity for me to do some research into things I never dedicate enough time to understand, and hopefully benefit whoever chances upon this little blog :)</description>
     </item>
     
   </channel>
