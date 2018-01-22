@@ -3,6 +3,11 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>http://jincheng.li/post/linux-booting/</loc>
+    <lastmod>2016-07-10T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>http://jincheng.li/post/postgres-query-opt/</loc>
     <lastmod>2016-04-08T00:00:00+00:00</lastmod>
   </url>
@@ -13,19 +18,14 @@
   </url>
   
   <url>
-    <loc>http://jincheng.li/post/linux-booting/</loc>
-    <lastmod>2016-07-10T22:12:37-04:00</lastmod>
-  </url>
-  
-  <url>
     <loc>http://jincheng.li/tags/assembly/</loc>
-    <lastmod>2016-07-10T22:12:37-04:00</lastmod>
+    <lastmod>2016-07-10T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>http://jincheng.li/tags/booting/</loc>
-    <lastmod>2016-07-10T22:12:37-04:00</lastmod>
+    <lastmod>2016-07-10T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -42,13 +42,13 @@
   
   <url>
     <loc>http://jincheng.li/</loc>
-    <lastmod>2016-04-08T00:00:00+00:00</lastmod>
+    <lastmod>2016-07-10T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>http://jincheng.li/tags/linux/</loc>
-    <lastmod>2016-07-10T22:12:37-04:00</lastmod>
+    <lastmod>2016-07-10T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -59,8 +59,8 @@
   </url>
   
   <url>
-    <loc>http://jincheng.li/tags/os-series/</loc>
-    <lastmod>2016-07-10T22:12:37-04:00</lastmod>
+    <loc>http://jincheng.li/tags/os/</loc>
+    <lastmod>2016-07-10T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -72,7 +72,7 @@
   
   <url>
     <loc>http://jincheng.li/post/</loc>
-    <lastmod>2016-04-08T00:00:00+00:00</lastmod>
+    <lastmod>2016-07-10T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   
@@ -84,7 +84,7 @@
   
   <url>
     <loc>http://jincheng.li/tags/</loc>
-    <lastmod>2016-07-10T22:12:37-04:00</lastmod>
+    <lastmod>2016-07-10T00:00:00+00:00</lastmod>
     <priority>0</priority>
   </url>
   

@@ -6,10 +6,19 @@
     <description>Recent content in Posts on Jincheng Li</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 08 Apr 2016 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 10 Jul 2016 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="http://jincheng.li/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>What Happens When You Press the Power Button on Your Linux Computer</title>
+      <link>http://jincheng.li/post/linux-booting/</link>
+      <pubDate>Sun, 10 Jul 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://jincheng.li/post/linux-booting/</guid>
+      <description>I wanted to start a series of posts on how the Linux operating system works, inspired by linux-insides, but instead of covering the entire operating system which is way too much work for my lazy ass, I&amp;rsquo;ll focus on several aspects of the OS and try to do a good job explaining them &amp;ndash; I&amp;rsquo;m hoping to make this comprehensible for someone who&amp;rsquo;s seen some assembly and C, but isn&amp;rsquo;t necessarily familiar with the internals of an OS.</description>
+    </item>
     
     <item>
       <title>PostgreSQL Query Optimization</title>
@@ -27,15 +36,6 @@
       
       <guid>http://jincheng.li/post/first-post/</guid>
       <description>This is probably my last year as a student, when I still have a lot of freedom allocating my time. In the hopes of putting my spare time to better use than playing Witcher 3 and Hearthstone, I decided to start writing some technical articles. This would be a good opportunity for me to do some research into things I never dedicate enough time to understand, and hopefully benefit whoever chances upon this little blog :)</description>
-    </item>
-    
-    <item>
-      <title>What Happens When You Press the Power Button on Your Linux Computer (Unfinished)</title>
-      <link>http://jincheng.li/post/linux-booting/</link>
-      <pubDate>Sun, 10 Jul 2016 22:12:37 -0400</pubDate>
-      
-      <guid>http://jincheng.li/post/linux-booting/</guid>
-      <description>I wanted to start a series of posts on how the Linux operating system works, inspired by linux-insides, but instead of covering the entire operating system which is way too much work for my lazy ass, I&amp;rsquo;ll focus on several aspects of the OS and try to do a good job explaining them &amp;ndash; I&amp;rsquo;m hoping to make this comprehensible for someone who&amp;rsquo;s seen some assembly and C, but isn&amp;rsquo;t necessarily familiar with the internals of an OS.</description>
     </item>
     
   </channel>

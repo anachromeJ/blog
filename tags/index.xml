@@ -6,7 +6,7 @@
     <description>Recent content in Tags on Jincheng Li</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 10 Jul 2016 22:12:37 -0400</lastBuildDate>
+    <lastBuildDate>Sun, 10 Jul 2016 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="http://jincheng.li/tags/index.xml" rel="self" type="application/rss+xml" />
     
@@ -14,7 +14,7 @@
     <item>
       <title>Assembly</title>
       <link>http://jincheng.li/tags/assembly/</link>
-      <pubDate>Sun, 10 Jul 2016 22:12:37 -0400</pubDate>
+      <pubDate>Sun, 10 Jul 2016 00:00:00 +0000</pubDate>
       
       <guid>http://jincheng.li/tags/assembly/</guid>
       <description></description>
@@ -23,7 +23,7 @@
     <item>
       <title>Booting</title>
       <link>http://jincheng.li/tags/booting/</link>
-      <pubDate>Sun, 10 Jul 2016 22:12:37 -0400</pubDate>
+      <pubDate>Sun, 10 Jul 2016 00:00:00 +0000</pubDate>
       
       <guid>http://jincheng.li/tags/booting/</guid>
       <description></description>
@@ -41,7 +41,7 @@
     <item>
       <title>Linux</title>
       <link>http://jincheng.li/tags/linux/</link>
-      <pubDate>Sun, 10 Jul 2016 22:12:37 -0400</pubDate>
+      <pubDate>Sun, 10 Jul 2016 00:00:00 +0000</pubDate>
       
       <guid>http://jincheng.li/tags/linux/</guid>
       <description></description>
@@ -57,11 +57,11 @@
     </item>
     
     <item>
-      <title>Os Series</title>
-      <link>http://jincheng.li/tags/os-series/</link>
-      <pubDate>Sun, 10 Jul 2016 22:12:37 -0400</pubDate>
+      <title>Os</title>
+      <link>http://jincheng.li/tags/os/</link>
+      <pubDate>Sun, 10 Jul 2016 00:00:00 +0000</pubDate>
       
-      <guid>http://jincheng.li/tags/os-series/</guid>
+      <guid>http://jincheng.li/tags/os/</guid>
       <description></description>
     </item>
     
