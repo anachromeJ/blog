@@ -17,7 +17,7 @@
       <pubDate>Sun, 10 Jul 2016 00:00:00 +0000</pubDate>
       
       <guid>http://jincheng.li/post/linux-booting/</guid>
-      <description>I wanted to start a series of posts on how the Linux operating system works, inspired by linux-insides, but instead of covering the entire operating system which is way too much work for my lazy ass, I&amp;rsquo;ll focus on several aspects of the OS and try to do a good job explaining them &amp;ndash; I&amp;rsquo;m hoping to make this comprehensible for someone who&amp;rsquo;s seen some assembly and C, but isn&amp;rsquo;t necessarily familiar with the internals of an OS.</description>
+      <description>I wanted to start a series of posts on how the Linux operating system works, inspired by linux-insides, but instead of covering the entire operating system which is way too much work for my lazy ass, I&amp;rsquo;ll just focus on several aspects of the OS and try to do a good job explaining them &amp;ndash; I&amp;rsquo;m hoping to make this comprehensible for someone who&amp;rsquo;s seen some assembly and C, but isn&amp;rsquo;t necessarily familiar with the internals of an OS.</description>
     </item>
     
     <item>
@@ -35,7 +35,8 @@
       <pubDate>Sun, 13 Mar 2016 00:00:00 +0000</pubDate>
       
       <guid>http://jincheng.li/post/first-post/</guid>
-      <description>This is probably my last year as a student, when I still have a lot of freedom allocating my time. In the hopes of putting my spare time to better use than playing Witcher 3 and Hearthstone, I decided to start writing some technical articles. This would be a good opportunity for me to do some research into things I never dedicate enough time to understand, and hopefully benefit whoever chances upon this little blog :)</description>
+      <description>I originally started this blog as a graduate student while I was at Columbia, in the hopes of putting my spare time to better use than playing video games. Now I just use it as a reason for me to do some research into things I never dedicate enough time to understand, and hopefully benefit whoever stumbles upon it.
+Also in case you&amp;rsquo;re wondering, it&amp;rsquo;s unbelievably easy to spin up something like this.</description>
     </item>
     
   </channel>

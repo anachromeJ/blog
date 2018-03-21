@@ -17,7 +17,7 @@
       <pubDate>Sun, 10 Jul 2016 00:00:00 +0000</pubDate>
       
       <guid>http://jincheng.li/post/linux-booting/</guid>
-      <description>I wanted to start a series of posts on how the Linux operating system works, inspired by linux-insides, but instead of covering the entire operating system which is way too much work for my lazy ass, I&amp;rsquo;ll focus on several aspects of the OS and try to do a good job explaining them &amp;ndash; I&amp;rsquo;m hoping to make this comprehensible for someone who&amp;rsquo;s seen some assembly and C, but isn&amp;rsquo;t necessarily familiar with the internals of an OS.</description>
+      <description>I wanted to start a series of posts on how the Linux operating system works, inspired by linux-insides, but instead of covering the entire operating system which is way too much work for my lazy ass, I&amp;rsquo;ll just focus on several aspects of the OS and try to do a good job explaining them &amp;ndash; I&amp;rsquo;m hoping to make this comprehensible for someone who&amp;rsquo;s seen some assembly and C, but isn&amp;rsquo;t necessarily familiar with the internals of an OS.</description>
     </item>
     
   </channel>
