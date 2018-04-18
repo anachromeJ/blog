@@ -6,18 +6,19 @@
     <description>Recent content in Os on Jincheng Li</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 10 Jul 2016 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 10 Jul 2016 14:56:57 -0400</lastBuildDate>
     
 	<atom:link href="http://jincheng.li/tags/os/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>What Happens When You Press the Power Button on Your Linux Computer</title>
-      <link>http://jincheng.li/post/linux-booting/</link>
-      <pubDate>Sun, 10 Jul 2016 00:00:00 +0000</pubDate>
+      <title>What Really Goes on in a Computer</title>
+      <link>http://jincheng.li/post/basic-comp-arch/</link>
+      <pubDate>Sun, 10 Jul 2016 14:56:57 -0400</pubDate>
       
-      <guid>http://jincheng.li/post/linux-booting/</guid>
-      <description>I wanted to start a series of posts on how the Linux operating system works, inspired by linux-insides, but instead of covering the entire operating system which is way too much work for my lazy ass, I&amp;rsquo;ll just focus on several aspects of the OS and try to do a good job explaining them &amp;ndash; I&amp;rsquo;m hoping to make this comprehensible for someone who&amp;rsquo;s seen some assembly and C, but isn&amp;rsquo;t necessarily familiar with the internals of an OS.</description>
+      <guid>http://jincheng.li/post/basic-comp-arch/</guid>
+      <description>I wanted to start a series of posts on how the Linux operating system works, inspired by linux-insides, but instead of covering the entire operating system which is way too much work for my lazy ass, I&amp;rsquo;ll just focus on several aspects of the OS which I find very interesting and may have taken me more time to grasp compared to other things.
+My motivation for doing this is mainly to learn more about Linux and fill in any knowledge gaps I have.</description>
     </item>
     
   </channel>
