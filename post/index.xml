@@ -22,6 +22,15 @@ My motivation for doing this is mainly to learn more about Linux.</description>
     </item>
     
     <item>
+      <title>Enforcing Email Frequency Caps</title>
+      <link>http://jincheng.li/post/email-frequency-cap/</link>
+      <pubDate>Thu, 29 Mar 2018 16:15:24 -0400</pubDate>
+      
+      <guid>http://jincheng.li/post/email-frequency-cap/</guid>
+      <description>Enough with the Spamming: Enforcing Email Frequency Caps This is a little something I did at work. Posted on Medium. Enjoy.</description>
+    </item>
+    
+    <item>
       <title>PostgreSQL Query Optimization</title>
       <link>http://jincheng.li/post/postgres-query-opt/</link>
       <pubDate>Fri, 08 Apr 2016 00:00:00 +0000</pubDate>
