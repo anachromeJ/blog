@@ -26,15 +26,15 @@
 <div class="article-meta">
 <h1><span class="title">What Really Goes on in a Computer</span></h1>
 
-<h2 class="date">2016/07/10</h2>
+<h2 class="date">2018/04/18</h2>
 </div>
 
 <main>
 
 
-<p>I wanted to start a series of posts on how the Linux operating system works, inspired by <a href="https://0xax.gitbooks.io/linux-insides/content/">linux-insides</a>, but instead of covering the entire operating system which is way too much work for my lazy ass, I&rsquo;ll just focus on several aspects of the OS which I find very interesting and may have taken me more time to grasp compared to other things.</p>
+<p>I wanted to start a series of posts on how the Linux operating system works, partially inspired by <a href="https://0xax.gitbooks.io/linux-insides/content/">linux-insides</a>, but instead of covering the entire operating system which is way too much work for my lazy ass, I&rsquo;ll just focus on several aspects of the OS which I find interesting and may have taken me more time to grasp compared to other things.</p>
 
-<p>My motivation for doing this is mainly to learn more about Linux and fill in any knowledge gaps I have. I&rsquo;m in no way an expert on the topic, so please feel free to correct me if anything here looks inaccurate.</p>
+<p>My motivation for doing this is mainly to learn more about Linux. I&rsquo;m in no way an expert on the topic, so please feel free to correct me if anything here looks inaccurate.</p>
 
 <p>This first post is going to be a review of basic computer architecture. Sometimes I find it easy to lose track of the fundamental building blocks when you are deep into the intricacies of complex systems. Plus I don&rsquo;t think schools necessarily cover all of this in a typical computer science program anymore (or maybe they do but I wasn&rsquo;t paying attention).</p>
 
@@ -77,7 +77,54 @@ This handler contains hundreds, perhaps thousands, of assembly instructions. The
 
 <p>But how is this done? Isn&rsquo;t memory just .. like .. RAM? How does writing to the RAM display stuff on the monitor?</p>
 
-<p>That&rsquo;s where memory-mapped I/O comes in. In x86, MMIO is the predominant way through which CPUs issue requests to other I/O devices. This mechanism maps device registers onto physical memory addresses, so that memory addresses do not just reference RAM &ndash; they can also reference things like video cards, BIOS, and other PCI extensions. When the CPU issues a memory instruction, the northbridge is responsible for routing it to the appropriate hardware via a memory address map. You can even look at this map with <code>cat /proc/iomem</code> under Linux.</p>
+<p>That&rsquo;s where memory-mapped I/O comes in. In x86, MMIO is the predominant way through which CPUs issue requests to other I/O devices. This mechanism maps device registers onto physical memory addresses, so that memory addresses do not just reference RAM &ndash; they can also reference things like video cards, BIOS, and other PCI extensions. When the CPU issues a memory instruction, the northbridge is responsible for routing it to the appropriate hardware via a memory address map. You can even look at this map with <code>cat /proc/iomem</code> under Linux. Here&rsquo;s what shows up for me:</p>
+
+<pre><code>00000000-00000fff : reserved
+00001000-00057fff : System RAM
+00058000-00058fff : reserved
+00059000-0009efff : System RAM
+0009f000-0009ffff : reserved
+000a0000-000bffff : PCI Bus 0000:00
+000c0000-000ce5ff : Video ROM
+000d0000-000d3fff : PCI Bus 0000:00
+000d4000-000d7fff : PCI Bus 0000:00
+000d8000-000dbfff : PCI Bus 0000:00
+000dc000-000dffff : PCI Bus 0000:00
+000f0000-000fffff : System ROM
+00100000-bd158fff : System RAM
+  02000000-02772d03 : Kernel code
+  02772d04-02d1af3f : Kernel data
+  02e77000-02fbbfff : Kernel bss
+bd159000-bd15ffff : ACPI Non-volatile Storage
+bd160000-bd5b9fff : System RAM
+bd5ba000-bda00fff : reserved
+bda01000-dd9a5fff : System RAM
+dd9a6000-ddbb5fff : reserved
+ddbb6000-ddbd5fff : ACPI Tables
+ddbd6000-de0fefff : ACPI Non-volatile Storage
+de0ff000-def5efff : reserved
+def5f000-deffefff : reserved
+defff000-deffffff : System RAM
+df000000-dfffffff : RAM buffer
+e0000000-feafffff : PCI Bus 0000:00
+  e0000000-f1ffffff : PCI Bus 0000:01
+    e0000000-efffffff : 0000:01:00.0
+    f0000000-f1ffffff : 0000:01:00.0
+      f1000000-f12fffff : efifb
+  f6000000-f70fffff : PCI Bus 0000:01
+    f6000000-f6ffffff : 0000:01:00.0
+      f6000000-f6ffffff : nvidia
+    f7000000-f707ffff : 0000:01:00.0
+    f7080000-f7083fff : 0000:01:00.1
+      f7080000-f7083fff : ICH HD audio
+  ... (lots of PCI extensions)
+fec00000-fec00fff : reserved
+  fec00000-fec003ff : IOAPIC 0
+fed00000-fed03fff : reserved
+  fed00000-fed003ff : HPET 0
+    fed00000-fed003ff : PNP0103:00
+... (omitted)
+</code></pre>
 
 <p>I left out one important piece of hardware in the above paragraph &ndash; hard drives. Hard drives are a bit more complicated in that the CPU talks to them through yet another interface (e.g. ATA), and maybe <a href="https://en.wikipedia.org/wiki/Direct_memory_access">Direct Memory Access</a> (DMA) on top of ATA. DMA allows the hard disk controller to directly write to RAM, so that the CPU doesn&rsquo;t have to keep polling from it and can read disk data from RAM as well. Ultimately though, the CPU accesses the hard disk just like anything else &ndash; by reading or writing to a memory location.</p>
 
@@ -95,7 +142,9 @@ This handler contains hundreds, perhaps thousands, of assembly instructions. The
 
 <p>Each interrupt is identified by a number between 0 and 255. Linux defines ranges within these 256 values that are dedicated to nonmaskable interrupts, maskable interrupts, and software interrupts. We don&rsquo;t need to go into too much detail here. What&rsquo;s more interesting is what exactly happens when an interrupt is issued.</p>
 
-<p>On the hardware side, every hardware controller that can issue interrupts has an output line dedicated to interrupts. These lines are then connected to the input pins of a Programmable Interrupt Controller (PIC), which is in turn connected to special pins of the CPU. The PIC monitors its input lines for signals, translates them into a number between 0-255, and sends them over to the CPU through its special pin. The CPU would then stop what it&rsquo;s currently doing and context switch to the appropriate interrupt handler.</p>
+<p>On the hardware side, every hardware controller that can issue interrupts has an output line dedicated to interrupts. These lines are then connected to the input pins of a Programmable Interrupt Controller (PIC), which is in turn connected to special pins of the CPU. The PIC monitors its input lines for signals, translates them into a number between 0-255, and sends them over to the CPU through its special pin. The CPU would then stop what it&rsquo;s currently doing and context switch to the appropriate interrupt handler. Here&rsquo;s an overly simplified diagram stolen from the Internet showing this:</p>
+
+<p><img src="/img/int_controller.jpg" alt="int_controller" /></p>
 
 <p>Now how would the CPU know what interrupt handler to invoke? This is where the Interrupt Descriptor Table (IDT) come in. You can think of it as a mapping from the numbers 0-255 to the code that should be run for each type of interrupt. There is a special CPU register <code>idtr</code> that stores the address of the IDT. When an interrupt occurs, the CPU would just look up whatever is stored at the address this register points to for the interrupt handler. This means the IDT can be located anywhere in memory as long as you put its location into <code>idtr</code> appropriately, and this is exactly what the Linux kernel does. During the booting process, <code>idtr</code> is first initialized by the BIOS to point to a small interrupt table. Later Linux takes over and puts a new address into the register so it points to a more full-fledged IDT.</p>
 

@@ -6,7 +6,7 @@
     <description>Recent content in Computer Architecture on Jincheng Li</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 10 Jul 2016 14:56:57 -0400</lastBuildDate>
+    <lastBuildDate>Wed, 18 Apr 2018 14:56:57 -0400</lastBuildDate>
     
 	<atom:link href="http://jincheng.li/tags/computer-architecture/index.xml" rel="self" type="application/rss+xml" />
     
@@ -14,11 +14,11 @@
     <item>
       <title>What Really Goes on in a Computer</title>
       <link>http://jincheng.li/post/basic-comp-arch/</link>
-      <pubDate>Sun, 10 Jul 2016 14:56:57 -0400</pubDate>
+      <pubDate>Wed, 18 Apr 2018 14:56:57 -0400</pubDate>
       
       <guid>http://jincheng.li/post/basic-comp-arch/</guid>
-      <description>I wanted to start a series of posts on how the Linux operating system works, inspired by linux-insides, but instead of covering the entire operating system which is way too much work for my lazy ass, I&amp;rsquo;ll just focus on several aspects of the OS which I find very interesting and may have taken me more time to grasp compared to other things.
-My motivation for doing this is mainly to learn more about Linux and fill in any knowledge gaps I have.</description>
+      <description>I wanted to start a series of posts on how the Linux operating system works, partially inspired by linux-insides, but instead of covering the entire operating system which is way too much work for my lazy ass, I&amp;rsquo;ll just focus on several aspects of the OS which I find interesting and may have taken me more time to grasp compared to other things.
+My motivation for doing this is mainly to learn more about Linux.</description>
     </item>
     
   </channel>
