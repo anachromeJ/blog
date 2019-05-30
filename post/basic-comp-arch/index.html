@@ -32,46 +32,42 @@
 <main>
 
 
-<p>I wanted to start a series of posts on how the Linux operating system works, partially inspired by <a href="https://0xax.gitbooks.io/linux-insides/content/">linux-insides</a>, but instead of covering the entire operating system which is way too much work for my lazy ass, I&rsquo;ll just focus on several aspects of the OS which I find interesting and may have taken me more time to grasp compared to other things.</p>
+<p>This is the first in a series of posts about the inner workings of Linux, partially inspired by <a href="https://0xax.gitbooks.io/linux-insides/content/">linux-insides</a>. I&rsquo;m starting with a review of basic computer architecture. Sometimes I find it easy to lose track of the fundamental building blocks when you are deep into the intricacies of complex systems. Plus I don&rsquo;t think schools necessarily cover all of this in a typical CS program (or maybe they do but I wasn&rsquo;t paying attention).</p>
 
-<p>My motivation for doing this is mainly to learn more about Linux. I&rsquo;m in no way an expert on the topic, so please feel free to correct me if anything here looks inaccurate.</p>
-
-<p>This first post is going to be a review of basic computer architecture. Sometimes I find it easy to lose track of the fundamental building blocks when you are deep into the intricacies of complex systems. Plus I don&rsquo;t think schools necessarily cover all of this in a typical computer science program anymore (or maybe they do but I wasn&rsquo;t paying attention).</p>
-
-<h1 id="von-neumann-machines">Von Neumann Machines</h1>
+<h2 id="von-neumann-machines">Von Neumann Machines</h2>
 
 <p><img src="/img/von_neumann.svg" alt="von_neumann" /></p>
 
-<p>Computers we use today roughly follow the <a href="https://en.wikipedia.org/wiki/Von_Neumann_architecture">von Neumann architecture</a> as shown above, with three major components &ndash; CPU, I/O devices, and memory &ndash; connected over <a href="https://en.wikipedia.org/wiki/Bus_(computing)">buses</a> (wires). The computer works as the CPU executes instructions that either read/write to memory, or interact with I/O devices.</p>
+<p>Computers today roughly follow the <a href="https://en.wikipedia.org/wiki/Von_Neumann_architecture">von Neumann architecture</a> as shown above, with three major components &ndash; CPU, I/O devices, and memory &ndash; connected over <a href="https://en.wikipedia.org/wiki/Bus_(computing)">buses</a> (wires). The computer works as the CPU executes instructions that either read/write to memory, or interact with I/O devices.</p>
 
-<p>The important thing to note here is that from the software perspective, this model is pretty much all there is to a computer. <em>Every</em> piece of software eventually gets translated into machine instructions that the CPU carries out, which then interacts with other devices, which interacts with either more devices, or you. This includes every piece of software this series of articles cover, and in particular every line of code in the Linux operating system. All of this might sound obvious, but I didn&rsquo;t fully realize it until a while into my CS degree.</p>
+<p>From the software perspective, this model is pretty much all there is to a computer. <em>Every</em> piece of software eventually gets translated into machine instructions that the CPU carries out, which then interacts with other devices, which interacts with either more devices, or you. This includes every line of code in the Linux operating system. All of this might sound obvious, but I didn&rsquo;t fully realize it until a while into my CS degree.</p>
 
 <p>As an aside, I think I didn&rsquo;t fully realize this simple fact thanks to the amazing and occasionally frustrating layers of abstractions we&rsquo;ve been able to build on top of simple binary logic gates. The typical CS education starts at a pretty high level of abstraction &ndash; you are building user-space applications with Java or Python or whatever language that new students use. It probably uses standard I/O, or some UI framework that hides all the details from you. You are taught to use magical terminal commands that somehow just work. You are also taught that your little program which sums up a list of numbers and prints them is executing CPU instructions. All of this makes sense, but what&rsquo;s happening in the terminal? What&rsquo;s happening in the text editor? What&rsquo;s happening in the browser that you use to look up all these documentation? These things are not at all obvious and it wasn&rsquo;t until much later that some of them began to make sense.</p>
 
-<p>Anyway, enough of that rant. Let&rsquo;s dive into an example to see just how complicated things can get and how powerful this von Neumann architecture is. Consider what happens between a keystroke and the letter getting displayed on the screen &ndash; let&rsquo;s say in a web browser&rsquo;s address bar.</p>
+<p>Anyway, let&rsquo;s dive into an example to see just how complicated things can get and how powerful this von Neumann architecture is. Consider what happens between a keystroke and the letter getting displayed on the screen &ndash; let&rsquo;s say in a web browser&rsquo;s address bar.</p>
 
 <ol>
 <li>The circuit in the keyboard generates an interrupt to the CPU.</li>
 <li>The CPU invokes the corresponding interrupt handler implemented in the device driver.
 This handler contains hundreds, perhaps thousands, of assembly instructions. These instructions has been living on the hard disk after your OS install a long time ago, and got loaded into memory when the operating system started. Now they are being loaded into CPU cache lines and registers in order to be executed.</li>
-<li>Among other things, the instructions translate the keystroke into some code that represents the letter, and put the code inside a queue. The queue is a utility library that references a whole other portion of code implemented by the Linux kernel.</li>
+<li>Among other things, the instructions translate the keystroke into some keycode (which I believe is just ascii code, e.g. 0x41 for &lsquo;a&rsquo;) that represents the letter, and put the code inside a queue. The queue is a data structure contained in some utility library in a whole other portion of Linux kernel&rsquo;s code base.</li>
 <li>There are system calls which, through several intermediate function calls, reads from that queue. The browser application, through several layers of abstractions of its own, is invoking one of those system calls reading from standard input.</li>
 <li>Upon receiving the input, the browser uses some graphics API (e.g. OpenGL) to call some graphics driver (e.g. Direct3D) in order to render the letter, passing in the letter&rsquo;s code and the bitmap of the font to use.</li>
-<li>The graphics driver runs code on the CPU to tell the graphics card <em>exactly</em> which pixels should be rendered as black and which ones white. The graphics card then renders it, and the monitor displays.</li>
-<li>Along the way the browser also thoughtfully told Google what you typed in order to give you auto-completions. This involves a ton of other CPU instructions.</li>
+<li>The graphics driver runs code on the CPU to tell the graphics card <em>exactly</em> which pixels should be rendered as black and which ones white. The graphics card then renders it, and the monitor displays it.</li>
+<li>Along the way the browser also thoughtfully told Google what you typed in order to give you auto-completions. This involves a ton of other CPU instructions and GPU rendering.</li>
 </ol>
 
-<p>You can see how this gets complicated really fast. It&rsquo;s amazing that they all work without much failure. The point to take away here is, at a fundamental level, all of this is just CPU instructions plus the CPU interacting with other hardware &ndash; keyboard, main memory, graphics card, the monitor (technically the graphics card would be interacting with the monitor), etc. These hardware are all I/O devices as far as the von Neumann model is concerned. This mental model should be very useful when understanding what&rsquo;s happening at the operating system level of a computer.</p>
+<p>You can see how this gets complicated really fast. It&rsquo;s amazing that they all work without much failure. The point to take away here is, at a fundamental level, all of this is just CPU instructions plus the CPU interacting with other hardware &ndash; keyboard, main memory, graphics card, the monitor, etc. All of this hardware are just I/O devices as far as the von Neumann model is concerned. This mental model will be very useful when understanding what&rsquo;s happening at the operating system level of a computer.</p>
 
-<h1 id="communication-between-cpu-and-other-devices">Communication between CPU and Other Devices</h1>
+<h2 id="communication-between-cpu-and-other-devices">Communication between CPU and Other Devices</h2>
 
-<p>A little more nuanced view of the architecture is that the CPU communicates with two different types of components: I/O and memory. Correspondingly there are roughly two different types communication channels: the northbridge and the southbridge. These are chipsets that you could see on a motherboard. The northbridge is closer to the CPU and responsible for communications requiring high performance (i.e. memory, and sometimes a video card), while all other devices go through the southbridge.</p>
+<p>A slightly more nuanced view of the architecture is that the CPU communicates with two different types of components: I/O and memory. Correspondingly there are roughly two different types communication channels: the northbridge and the southbridge. These are chipsets that you could see on a motherboard. The northbridge is closer to the CPU and responsible for communications requiring high performance (i.e. memory, and sometimes a video card), while all other devices go through the southbridge.</p>
 
 <p><img src="/img/motherboard.svg" alt="motherboard" /></p>
 
 <p>Okay great, now we know the CPU talks to other components through &lsquo;bridges&rsquo;, but how exactly does the communication happen? What data is passed through and what kind of CPU instructions do we use?</p>
 
-<h2 id="cpu-to-hardware-memory-mapped-i-o-https-en-wikipedia-org-wiki-memory-mapped-i-o">CPU to Hardware: <a href="https://en.wikipedia.org/wiki/Memory-mapped_I/O">Memory-mapped I/O</a></h2>
+<h3 id="cpu-to-hardware-memory-mapped-i-o-https-en-wikipedia-org-wiki-memory-mapped-i-o">CPU to Hardware: <a href="https://en.wikipedia.org/wiki/Memory-mapped_I/O">Memory-mapped I/O</a></h3>
 
 <p>If you squint at the above diagram hard enough, you&rsquo;ll notice that the only gateway the CPU has to the outside world is the <a href="https://en.wikipedia.org/wiki/Front-side_bus">front-side bus</a> (FSB). Now this diagram is a bit outdated and Intel has come up with a bunch of new things since then, but the point still stands that, the primary interface between the CPU and the outside world is a bunch of pins on the FSB. These pins help transmit memory addresses and the data that&rsquo;s read from / written to these addresses. So in terms of CPU instructions, the way you would use the CPU to communicate with the outside world is by issuing load and store instructions to some memory location.</p>
 
@@ -79,7 +75,7 @@ This handler contains hundreds, perhaps thousands, of assembly instructions. The
 
 <p>That&rsquo;s where memory-mapped I/O comes in. In x86, MMIO is the predominant way through which CPUs issue requests to other I/O devices. This mechanism maps device registers onto physical memory addresses, so that memory addresses do not just reference RAM &ndash; they can also reference things like video cards, BIOS, and other PCI extensions. When the CPU issues a memory instruction, the northbridge is responsible for routing it to the appropriate hardware via a memory address map. You can even look at this map with <code>cat /proc/iomem</code> under Linux. Here&rsquo;s what shows up for me:</p>
 
-<pre><code>00000000-00000fff : reserved
+<pre><code class="language-text">00000000-00000fff : reserved
 00001000-00057fff : System RAM
 00058000-00058fff : reserved
 00059000-0009efff : System RAM
@@ -132,11 +128,11 @@ fed00000-fed03fff : reserved
 
 <p>In terms of concrete assembly instructions, the most widely used way to access memory is not actually an instruction. It&rsquo;s more like a notation. In x86 assembly, you can use parentheses to indicate reading from a memory location. For example, <code>add $10, (%eax)</code> would add 10 to whatever number is stored at the address referenced by the <code>eax</code> register. This notation applies to a wide variety of instructions, so you can easily read and write to memory in a lot of different ways.</p>
 
-<p>One interesting aside is that all of these memory operations, including reading from RAM, take a lot more than one CPU cycle, so the CPU is busy doing lots of other things while waiting for a memory read. See <a href="https://stackoverflow.com/questions/25563444/what-does-the-processor-do-while-waiting-for-a-main-memory-fetch">this SO post</a> for more details.</p>
+<p>One interesting aside is that all of these memory operations, including reading from RAM, take a lot more than one CPU cycle, so the CPU is busy doing lots of other things while waiting for a memory read, like <a href="https://en.wikipedia.org/wiki/Speculative_execution">speculative execution</a> which has been a source of trouble lately. See <a href="https://stackoverflow.com/questions/25563444/what-does-the-processor-do-while-waiting-for-a-main-memory-fetch">this SO post</a> for more about what a CPU is doing while waiting for memory.</p>
 
-<p>Cool. That covers how you can use software to make the CPU talk to other hardware. What about the other way around?</p>
+<p>That covers how you can use software to make the CPU talk to other hardware. What about the other way around?</p>
 
-<h2 id="hardware-to-cpu-hardware-interrupts-https-en-wikipedia-org-wiki-interrupt">Hardware to CPU: Hardware <a href="https://en.wikipedia.org/wiki/Interrupt">Interrupts</a></h2>
+<h3 id="hardware-to-cpu-hardware-interrupts-https-en-wikipedia-org-wiki-interrupt">Hardware to CPU: Hardware <a href="https://en.wikipedia.org/wiki/Interrupt">Interrupts</a></h3>
 
 <p>Hardware interrupts are used by devices to notify the CPU that something happened which requires its attention. Typical examples include things like the disk controller saying the data the CPU is trying to read is ready, the keyboard saying a key was pressed, etc. There are both hardware and software interrupts, but we&rsquo;ll focus on the hardware portion since that&rsquo;s been the theme of this discussion. There are a lot more details on the Wiki page and the book <a href="https://www.amazon.com/Understanding-Linux-Kernel-Third-Daniel/dp/0596005652">Understanding the Linux Kernel</a>.</p>
 
@@ -146,14 +142,16 @@ fed00000-fed03fff : reserved
 
 <p><img src="/img/int_controller.jpg" alt="int_controller" /></p>
 
-<p>Now how would the CPU know what interrupt handler to invoke? This is where the Interrupt Descriptor Table (IDT) come in. You can think of it as a mapping from the numbers 0-255 to the code that should be run for each type of interrupt. There is a special CPU register <code>idtr</code> that stores the address of the IDT. When an interrupt occurs, the CPU would just look up whatever is stored at the address this register points to for the interrupt handler. This means the IDT can be located anywhere in memory as long as you put its location into <code>idtr</code> appropriately, and this is exactly what the Linux kernel does. During the booting process, <code>idtr</code> is first initialized by the BIOS to point to a small interrupt table. Later Linux takes over and puts a new address into the register so it points to a more full-fledged IDT.</p>
+<p>But how would the CPU know which interrupt handler to invoke?</p>
 
-<p>That covers everything I wanted to talk about in this post. Now we know how the computer works at a low level of abstraction, and we know how the CPU interacts with other hardware components. Frankly I think I learned more about these things while writing this than I ever did in school or at work. Next up we&rsquo;ll talk about the booting process in more detail.</p>
+<p>This is where the Interrupt Descriptor Table (IDT) comes in. You can think of it as a mapping from the numbers 0-255 to the code that should be run for each type of interrupt. There is a special CPU register <code>idtr</code> that stores the address of the IDT. When an interrupt occurs, the CPU would just look up whatever is stored at the address this register points to for the interrupt handler. This means the IDT can be located anywhere in memory as long as you put its location into <code>idtr</code> appropriately, and this is exactly what the Linux kernel does. During the booting process, <code>idtr</code> is first initialized by the BIOS to point to a small interrupt table. Later Linux takes over and puts a new address into the register so it points to a more full-fledged IDT.</p>
 
-<h1 id="references-and-further-reading">References and Further Reading</h1>
+<p>That covers everything I wanted to talk about in this post. Now we know how the computer works at a pretty low level of abstraction, and we know how the CPU interacts with other hardware components. Frankly I think I learned more about these things while writing this than I ever did in school or at work. Next up we&rsquo;ll talk about the booting process in more detail.</p>
+
+<h2 id="references-and-further-reading">References and Further Reading</h2>
 
 <ol>
-<li><a href="https://0xax.gitbooks.io/linux-insides/content/index.html">Linux Insides Gitbook</a></li>
+<li><a href="https://0xax.gitbooks.io/linux-insides/content/index.html">Linux Insides</a></li>
 <li><a href="https://manybutfinite.com/post/motherboard-chipsets-memory-map/">Gustavo Duarte&rsquo;s awesome blog</a></li>
 <li><a href="https://www.amazon.com/Understanding-Linux-Kernel-Third-Daniel/dp/0596005652">Understanding the Linux Kernel</a></li>
 <li><a href="https://github.com/torvalds/linux">Linux Source Code</a></li>
@@ -184,19 +182,22 @@ MathJax.Hub.Config({
 
 <script async src="/js/center-img.js"></script>
 
-<script>
-(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-ga('create', 'UA-42978887-2', 'auto');
-ga('send', 'pageview');
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-42978887-2', 'auto');
+	
+	ga('send', 'pageview');
+}
 </script>
 
 
   <div id="disqus_thread"></div>
-<script>
+<script type="application/javascript">
     var disqus_config = function () {
     
     
@@ -218,7 +219,7 @@ ga('send', 'pageview');
 
   
   <hr/>
-  &copy; <a href="http://jincheng.li">Jincheng Li</a> 2018 | <a href="https://github.com/jinchengJL">Github</a> | <a href="https://twitter.com/jinchengJL">Twitter</a>
+  &copy; <a href="http://jincheng.li">Jincheng Li</a> 2018 | <a href="https://github.com/jinchengJL">Github</a> | <a href="https://twitter.com/jinchengJL">Twitter</a> | <a href="https://www.linkedin.com/in/jincheng-li-6a772041">LinkedIn</a>
   
   </footer>
   </body>
