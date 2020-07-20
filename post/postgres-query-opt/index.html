@@ -59,7 +59,7 @@
 
 <p>Let&rsquo;s talk about a concrete example. Suppose we have a database about Oscar nominations, with the following tables:</p>
 
-<pre><code>CREATE TABLE Movies (
+<pre><code class="language-sql">CREATE TABLE Movies (
   mid int PRIMARY KEY,
   title text NOT NULL
 );
@@ -80,7 +80,7 @@ CREATE TABLE Nominees (
 
 <p>Here is a SQL query that finds the names of all movies nominated in 2016:</p>
 
-<pre><code>SELECT m.title
+<pre><code class="language-sql">SELECT m.title
 FROM Movies m, Nominees n
 WHERE m.mid = n.mid AND n.year = 2016;
 </code></pre>
@@ -151,7 +151,7 @@ WHERE m.mid = n.mid AND n.year = 2016;
 
 <p>Here&rsquo;s what happens at iteration $i$ of the algorithm, assuming we store our results in the <code>bestjoin</code> array:</p>
 
-<pre><code>// left-deep and right-deep
+<pre><code class="language-pseudocode">// left-deep and right-deep
 for each set of (i-1) relations S begin
     for each relation R not in S begin
         consider all possible algorithms to join bestjoin[S] with R
@@ -175,7 +175,7 @@ end
 
 <p>Iteration 1 of the algorithm is pretty straightforward:</p>
 
-<pre><code>bestjoin[A] = A
+<pre><code class="language-pseudocode">bestjoin[A] = A
 bestjoin[B] = B
 bestjoin[C] = C
 bestjoin[D] = D
@@ -183,7 +183,7 @@ bestjoin[D] = D
 
 <p>Iteration 2 of the algorithm, where <code>op</code> stands for any one of the five join algorithms mentioned earlier (nested loops join, block nested loops join, index nested loops join, sort merge join and hash join):</p>
 
-<pre><code>bestjoin[A,B] = best(bestjoin[A] op B, bestjoin[B] op A)
+<pre><code class="language-pseudocode">bestjoin[A,B] = best(bestjoin[A] op B, bestjoin[B] op A)
 bestjoin[A,C] = best(bestjoin[A] op C, bestjoin[C] op A)
 bestjoin[A,D] = best(bestjoin[A] op D, bestjoin[D] op A)
 bestjoin[B,C] = best(bestjoin[B] op C, bestjoin[C] op B)
@@ -193,7 +193,7 @@ bestjoin[C,D] = best(bestjoin[C] op D, bestjoin[D] op C)
 
 <p>Iteration 3 of the algorithm, now left-deep and right-deep starts to make a difference:</p>
 
-<pre><code>bestjoin[A,B,C] = best(bestjoin[A,B] op C,
+<pre><code class="language-pseudocode">bestjoin[A,B,C] = best(bestjoin[A,B] op C,
                        bestjoin[A,C] op B,
                        bestjoin[B,C] op A
                        C op bestjoin[A,B],
@@ -210,7 +210,7 @@ bestjoin[A,C,D] and bestjoin[B,C,D] are similar
 
 <p>Finally, iteration 4 of the algorithm, where bushy plans come in:</p>
 
-<pre><code>bestjoin[A,B,C,D] = best(bestjoin[A,B,C] op D,
+<pre><code class="language-pseudocode">bestjoin[A,B,C,D] = best(bestjoin[A,B,C] op D,
                          bestjoin[A,B,D] op C,
                          bestjoin[A,C,D] op B,
                          bestjoin[B,C,D] op A,
@@ -231,8 +231,6 @@ bestjoin[A,C,D] and bestjoin[B,C,D] are similar
 <p>It may not seem terribly effective at first, but at each iteration, we are actually re-using a lot of information computed from previous iterations, and thus saving a lot of CPU time. The exponential space of plans is unavoidable whether we choose to only consider left-deep plans, or all of left-deep, right-deep and bushy plans. Postgres also tries to be smart about this, and preemptively discards some joins that are obviously inefficient. For example, only joins between relations that share some attributes are considered (otherwise it would just be a cross-product).</p>
 
 <p>That&rsquo;s it! That&rsquo;s the basic framework of how Postgres does query optimization. Databases are incredibly complex stuff, but after writing this post I feel like I know them a little better. By the way, Postgres&rsquo; source code is pretty fun to look at. It&rsquo;s written in C, too, which, you know, isn&rsquo;t C++.</p>
-
-<p>Also, please let me know if there&rsquo;s anything inaccurate/confusing here, or if the text doesn&rsquo;t flow well. English is not my first language, and while I&rsquo;m confident this text should mostly make sense, I&rsquo;m not sure how comfortable it is to read to a native speaker.</p>
 
 </main>
 
@@ -294,7 +292,7 @@ if (!doNotTrack) {
 
   
   <hr/>
-  &copy; Jincheng Li 2018
+  &copy; Jincheng Li 2020
   
   </footer>
   </body>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Career on Jincheng Li</title>
+    <link>http://jincheng.li/tags/career/</link>
+    <description>Recent content in Career on Jincheng Li</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 19 Jul 2020 19:22:38 -0400</lastBuildDate>
+    
+	<atom:link href="http://jincheng.li/tags/career/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Learnings from the Past Two Years</title>
+      <link>http://jincheng.li/post/learnings-2018/</link>
+      <pubDate>Sun, 19 Jul 2020 19:22:38 -0400</pubDate>
+      
+      <guid>http://jincheng.li/post/learnings-2018/</guid>
+      <description>This used to be an unfinished rant/post from when I crashed into some free time in 2019. At the time I&amp;rsquo;ve been working at BigCo for a year, so I reflected on what I&amp;rsquo;ve learned a bit. Now, another year later, I&amp;rsquo;ve finally found the time to finish it.
+Opinions my own and does not represent those of my employer, etc etc.
+Company Culture I think most of the things people say about BigCo&amp;rsquo;s culture are true, but experiencing it helps me put them into perspective.</description>
+    </item>
+    
+  </channel>
+</rss>

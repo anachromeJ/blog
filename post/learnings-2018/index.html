@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Learnings from the Past Two Years | Jincheng Li</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Learnings from the Past Two Years</span></h1>
+
+<h2 class="date">2020/07/19</h2>
+</div>
+
+<main>
+
+
+<p>This used to be an unfinished rant/post from when I <a href="https://travel.state.gov/content/travel/en/us-visas/visa-information-resources/administrative-processing-information.html"><em>crashed</em></a> into some free time in 2019. At the time I&rsquo;ve been working at BigCo for a year, so I reflected on what I&rsquo;ve learned a bit. Now, another year later, I&rsquo;ve finally found the time to finish it.</p>
+
+<p>Opinions my own and does not represent those of my employer, etc etc.</p>
+
+<h2 id="company-culture">Company Culture</h2>
+
+<p>I think most of the things people say about BigCo&rsquo;s culture are true, but experiencing it helps me put them into perspective. Here are some remarks I recall during my conversations with other people about BigCo:</p>
+
+<ol>
+<li>BigCo is an engineer&rsquo;s heaven.
+This very much depends on what your idea of an engineer&rsquo;s heaven is. Is it a place where you&rsquo;re surrounded by smart, experienced engineers with a focus on code quality?</li>
+<li>Working at BigCo is like living in a sandbox. You don&rsquo;t really get to experience this kind of working environment outside of it. I think the connotation here is that it is great as long as you are here, but the culture doesn&rsquo;t prepare you for other workplaces.</li>
+<li>BigCo hires smart people and don&rsquo;t care about much else. I&rsquo;ve certainly seen people here that are not very socially well-adjusted (and this may very well include myself), but are extremely intelligent.</li>
+<li>People are driven by promotion criteria instead of doing real work. I think there is more to this. As a company gets bigger, there comes a point where what benefits an employee and what benefits the company diverge. Promotion is a very powerful tool to re-align those things, but it can only do so much.</li>
+</ol>
+
+<h2 id="acronyms">Acronyms</h2>
+
+<p>Some famous scientist (Feynman?) once expressed his dislike of acronyms. When I started here I very much agreed with that sentiment. In my first few months, I must have encountered more than a hundred acronyms and project nicknames there were completely foreign to me. For the first handful, it felt fine to ask &ldquo;what&rsquo;s X?&rdquo;, but as time wore on, it got to a point where I felt like I should know most of these things, but didn&rsquo;t, and I became more hesitant to show my ignorance. I got into this game of trying to decide which acronym would make me look relatively less ignorant before I asked what it is. Obviously, not my proudest moment.</p>
+
+<h2 id="software-rewrites">Software Rewrites</h2>
+
+<h2 id="c">C++</h2>
+
+<p>Writing C++ with sufficient library and tooling support is night and day from writing your own little C++ program from scratch. Before coming to my current employer and starting to write C++ professionally, I&rsquo;ve only had intro-level experience with the language, writing programs for university assignments. That was not a pleasant undertaking. I think multiple factors contributed to this - lack of modern C++ features, lack of library support, and lack of build tools. You needed to figure out how to write a Makefile, how to give gcc the right flags to make some ancient feature work, how to manually manage memory, how to convert between C-style strings and C++-style ones, how to join strings together for debugging, etc. Compare this to the Python&rsquo;s simple builtin primitives or Java&rsquo;s library support, and you get students and maybe even professors who don&rsquo;t want anything to do with C++.</p>
+
+<p>Overall I think learning C++ has been worth my time. It&rsquo;s really like learning three or four different languages. You are learning OOP, generic programming, concurrency paradigms, memory management without a GC, templates, and probably lots more. The result is that after a year I still have no idea what the heck I&rsquo;m doing, but I know more than I did before.</p>
+
+<p>I definitely could not have caught up to the best practices of this language on my own time. I&rsquo;d say C++ is complex enough to warrant the 10,000-hour rule. You need to spend a <em>lot</em> of time with it just to be <em>productive</em> (or in other words, not accidentally run into some rabbit hole of cryptic template errors consuming your entire afternoon), much more so than probably any other langauge, and you won&rsquo;t have that kind of time unless you make it part of your day job. In fact, even if you do, it&rsquo;d still take years of experience before you can reasonably say you&rsquo;re familiar with the common pitfalls of the language. This is why hundred-page <a href="https://google.github.io/styleguide/cppguide.html">style</a> <a href="https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md">guides</a> exist. It&rsquo;s not like you could internalize the contents of these without dedicating a significant portion of your career to them.</p>
+
+<p>Incidentally, I&rsquo;ve bumped into open-source code written by PhDs at top CS programs who&rsquo;ve done multiple internships at BigCo, and there are still blatant misuses of language features. It just speaks to the complexity of the language.</p>
+
+<p>Ok, enough with the rant. Despite all the above, I still think that, if you have the time to go through with all of it, C++ is a hard-to-replace, constantly improving and occasionally even like-able language. It&rsquo;s statically typed which makes it manageable in a huge codebase; it gives you as much control over the system as you want; it supports every programming style out there so you can pick your own poison; big software companies have invested heavily in it so it&rsquo;s slowly morphing into a modern language.</p>
+
+<p>Another nice thing about C++ is the immense educational value it carries.</p>
+
+<p>Of course, future me might come back here, read this, and then laugh at my desperate attempt to justify wasting all this time on an ancient language. But you never know!</p>
+
+<h2 id="complex-systems">Complex Systems</h2>
+
+<p>Complex systems can be <em>really</em> complex.</p>
+
+<p>Before starting my new job, I thought I was prepared to take on the complexity of whatever software project was thrown my way. It was only a matter of time before I could fully grasp the inner workings of a system.</p>
+
+<p>It&rsquo;s easy to understand intuitively why the complexity of a system can easily surpass any single person&rsquo;s comprehension. Software is developed by people, and the complexity of a system can easily become proportional to the number of people behind it. Despite this, we have developed such nice abstractions around software, that it&rsquo;s easy to fall prey to the illusion that we can understand just about anything other people have built.</p>
+
+<p>Working at a company of this scale definitely set my perspective straight here.</p>
+
+<h2 id="datacenter-networks">Datacenter Networks</h2>
+
+<p>Before coming to BigCo I had the computer networks knowledge of an average college grad in computer science. I had taken one course on computer networking, and it struck me as rather uninteresting, so I didn&rsquo;t spend much more time learning about it. I actually think my lack of interest at the time was rather justified, given that this is a field with seemingly not very much breakthroughs since the invention of the Internet. The OSI 7-layer model was developed in the late 1970s and it&rsquo;s still the first thing taught in a networking course, and it&rsquo;s still basically accurate. Also, &ldquo;protocols&rdquo; and &ldquo;standards&rdquo; and &ldquo;RFCs&rdquo; aren&rsquo;t exactly the sort of things to get you excited about a topic. I mean, have you seen the hype around this thing called machine learning? Sometimes it even masquerades as AI.</p>
+
+<p>That said, I&rsquo;ve realized that when it comes to interests, I have to force myself a little. I thought the database course I took as an undergrad was boring, and I now spend my free time reading about database research. I thought networking wasn&rsquo;t fun, and yet I went to this year&rsquo;s NSDI and couldn&rsquo;t be more happy about it.</p>
+
+<p>As it turns out, there are lots of active research around computer networking! And they are very interesting. For example one of the hot topics is RDMA.</p>
+
+<h2 id="research">Research</h2>
+
+<h2 id="site-reliability-engineering">Site Reliability Engineering</h2>
+
+<p>Frankly it&rsquo;s quite fascinating.</p>
+
+</main>
+
+  <footer>
+  <script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [['$','$'], ['\\(','\\)']],
+    displayMath: [['$$','$$'], ['\[','\]']],
+    processEscapes: true,
+    processEnvironments: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+    TeX: { equationNumbers: { autoNumber: "AMS" },
+         extensions: ["AMSmath.js", "AMSsymbols.js"] }
+  }
+});
+</script>
+
+<script async src="/js/center-img.js"></script>
+
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-42978887-2', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+
+  <div id="disqus_thread"></div>
+<script type="application/javascript">
+    var disqus_config = function () {
+    
+    
+    
+    };
+    (function() {
+        if (["localhost", "127.0.0.1"].indexOf(window.location.hostname) != -1) {
+            document.getElementById('disqus_thread').innerHTML = 'Disqus comments not available by default when the website is previewed locally.';
+            return;
+        }
+        var d = document, s = d.createElement('script'); s.async = true;
+        s.src = '//' + "jchli" + '.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="https://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+
+  
+  <hr/>
+  &copy; Jincheng Li 2018
+  
+  </footer>
+  </body>
+</html>
+

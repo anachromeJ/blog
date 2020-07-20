@@ -146,7 +146,7 @@ fed00000-fed03fff : reserved
 
 <p>This is where the Interrupt Descriptor Table (IDT) comes in. You can think of it as a mapping from the numbers 0-255 to the code that should be run for each type of interrupt. There is a special CPU register <code>idtr</code> that stores the address of the IDT. When an interrupt occurs, the CPU would just look up whatever is stored at the address this register points to for the interrupt handler. This means the IDT can be located anywhere in memory as long as you put its location into <code>idtr</code> appropriately, and this is exactly what the Linux kernel does. During the booting process, <code>idtr</code> is first initialized by the BIOS to point to a small interrupt table. Later Linux takes over and puts a new address into the register so it points to a more full-fledged IDT.</p>
 
-<p>That covers everything I wanted to talk about in this post. Now we know how the computer works at a pretty low level of abstraction, and we know how the CPU interacts with other hardware components. Frankly I think I learned more about these things while writing this than I ever did in school or at work. Next up we&rsquo;ll talk about the booting process in more detail.</p>
+<p>That covers everything I wanted to talk about in this post. Now we know how the computer works at a pretty low level of abstraction, and we know how the CPU interacts with other hardware components. Frankly I think I learned more about these things while writing this than I ever did in school or at work. <del>Next up we&rsquo;ll talk about the booting process in more detail.</del></p>
 
 <h2 id="references-and-further-reading">References and Further Reading</h2>
 
@@ -219,7 +219,7 @@ if (!doNotTrack) {
 
   
   <hr/>
-  &copy; Jincheng Li 2018
+  &copy; Jincheng Li 2020
   
   </footer>
   </body>
