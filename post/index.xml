@@ -6,10 +6,21 @@
     <description>Recent content in Posts on Jincheng Li</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 18 Apr 2018 14:56:57 -0400</lastBuildDate>
+    <lastBuildDate>Sun, 19 Jul 2020 19:22:38 -0400</lastBuildDate>
     
 	<atom:link href="http://jincheng.li/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Learnings from the Past Two Years</title>
+      <link>http://jincheng.li/post/learnings-2018/</link>
+      <pubDate>Sun, 19 Jul 2020 19:22:38 -0400</pubDate>
+      
+      <guid>http://jincheng.li/post/learnings-2018/</guid>
+      <description>This used to be an unfinished rant/post from when I crashed into some free time in 2019. At the time I&amp;rsquo;ve been working at BigCo for a year, so I reflected on what I&amp;rsquo;ve learned a bit. Now, another year later, I&amp;rsquo;ve finally found the time to finish it.
+Opinions my own and does not represent those of my employer, etc etc.
+Company Culture I think most of the things people say about BigCo&amp;rsquo;s culture are true, but experiencing it helps me put them into perspective.</description>
+    </item>
     
     <item>
       <title>Computer Architecture 101</title>
@@ -44,8 +55,8 @@
       <pubDate>Sun, 13 Mar 2016 00:00:00 +0000</pubDate>
       
       <guid>http://jincheng.li/post/first-post/</guid>
-      <description>I originally started this blog as a graduate student while I was at Columbia, in the hopes of putting my spare time to better use than playing video games. Now I just use it as a reason for me to do some research into things I never dedicate enough time to understand, and hopefully benefit whoever stumbles upon it.
-Also in case you&amp;rsquo;re wondering, it&amp;rsquo;s unbelievably easy to spin up something like this.</description>
+      <description>I originally started this blog as a graduate student while I was at Columbia, in the hopes of putting my spare time to better use. Now it&amp;rsquo;s just a reason for me to do some research into things I never dedicate enough time to understand, and hopefully benefit whoever happens to read it.
+This site uses Hugo. The theme is Hugo Xmin.</description>
     </item>
     
   </channel>
