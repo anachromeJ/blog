@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Os on Jincheng Li</title>
+    <title>os on Jincheng Li</title>
     <link>http://jincheng.li/tags/os/</link>
-    <description>Recent content in Os on Jincheng Li</description>
+    <description>Recent content in os on Jincheng Li</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 18 Apr 2018 14:56:57 -0400</lastBuildDate>
@@ -17,7 +17,9 @@
       <pubDate>Wed, 18 Apr 2018 14:56:57 -0400</pubDate>
       
       <guid>http://jincheng.li/post/basic-comp-arch/</guid>
-      <description>This is the first in a series of posts about the inner workings of Linux, partially inspired by linux-insides. I&amp;rsquo;m starting with a review of basic computer architecture. I find it easy to lose track of the fundamental building blocks of a computer when you are operating at a higher level of abstraction. Plus I don&amp;rsquo;t think schools necessarily cover all of this in a typical CS program (or maybe they do but I wasn&amp;rsquo;t paying attention).</description>
+      <description>A review of basic computer architecture follows, partially inspired by linux-insides.
+Von Neumann Machines Computers today roughly follow the von Neumann architecture as shown above, with three major components &amp;ndash; CPU, I/O devices, and memory &amp;ndash; connected over buses (wires). The computer works as the CPU executes instructions that either read/write to memory, or interact with I/O devices.
+From the software perspective, this model is pretty much all there is to a computer.</description>
     </item>
     
   </channel>

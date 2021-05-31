@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Misc on Jincheng Li</title>
+    <title>misc on Jincheng Li</title>
     <link>http://jincheng.li/tags/misc/</link>
-    <description>Recent content in Misc on Jincheng Li</description>
+    <description>Recent content in misc on Jincheng Li</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sun, 13 Mar 2016 00:00:00 +0000</lastBuildDate>
@@ -12,13 +12,13 @@
     
     
     <item>
-      <title>Why This Blog</title>
+      <title>About This Blog</title>
       <link>http://jincheng.li/post/first-post/</link>
       <pubDate>Sun, 13 Mar 2016 00:00:00 +0000</pubDate>
       
       <guid>http://jincheng.li/post/first-post/</guid>
-      <description>I originally started this blog as a graduate student while I was at Columbia, in the hopes of putting my spare time to better use. Now it&amp;rsquo;s just a rarely updated dumping ground of half-written articles :)
-This site uses Hugo. The theme is Hugo Xmin.</description>
+      <description>I originally started this blog as a graduate student at Columbia, in the hopes of putting my spare time to better use. Now it&amp;rsquo;s just a rarely updated dumping ground of half-written articles :)
+This site is powered by Hugo and Github Pages. The theme is Hugo Xmin.</description>
     </item>
     
   </channel>

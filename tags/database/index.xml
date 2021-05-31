@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Database on Jincheng Li</title>
+    <title>database on Jincheng Li</title>
     <link>http://jincheng.li/tags/database/</link>
-    <description>Recent content in Database on Jincheng Li</description>
+    <description>Recent content in database on Jincheng Li</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Fri, 08 Apr 2016 00:00:00 +0000</lastBuildDate>
@@ -17,7 +17,8 @@
       <pubDate>Fri, 08 Apr 2016 00:00:00 +0000</pubDate>
       
       <guid>http://jincheng.li/post/postgres-query-opt/</guid>
-      <description>The other day I saw a tweet about blog posts it would be great to see, and one of them was &amp;ldquo;inside PostgreSQL: how a join works internally, what makes it fast&amp;rdquo;. Coincidentally, I&amp;rsquo;m taking a course on database system implementation, and I thought this would be a great way to study for my midterm! Of course, by the time I&amp;rsquo;ve finished this post, the midterm is long gone, but it was still a great incentive for me to start writing :)</description>
+      <description>This post gives a high-level explanation of Postgres query optimization. It assumes basic familiarity with relational databases and SQL queries. Having some knowledge in query optimization helps, but is not necessary.
+Background PostgreSQL, or Postgres, is an open-source object-relational database management system. It has gone through around 30 years of development, has a ton of features, and is very popular within the database community. This post will focus on its query optimization routines, particularly how it optimizes join queries, but if you&amp;rsquo;re curious, you should definitely check out the source code.</description>
     </item>
     
   </channel>
